@@ -1,0 +1,32 @@
+name: Documentation
+on:
+  push:
+    branches: [master, main]
+    tags: '*'
+    paths:
+      - '.github/workflows/docs.yml'
+      - 'src/**'
+      - 'docs/**'
+  pull_request:
+    types: [opened, synchronize, reopened]
+    paths:
+      - '.github/workflows/docs.yml'
+      - 'src/**'
+      - 'docs/**'
+jobs:
+  Documentation:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: julia-actions/setup-julia@latest
+        with:
+          version: 1.5 # earliest supported version
+      - uses: actions/cache@v2
+        with:
+          path: ~/.julia/artifacts
+          key: ${{ runner.os }}-docs-artifacts-${{ hashFiles('**/Project.toml') }}
+          restore-keys: ${{ runner.os }}-docs-artifacts
+      - uses: julia-actions/julia-docdeploy@releases/v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # For authentication with GitHub Actions token
+          PYTHON: ""
