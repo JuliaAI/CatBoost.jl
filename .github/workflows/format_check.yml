@@ -1,5 +1,6 @@
 name: format-check
 on:
+  workflow_dispatch:
   push:
     branches:
       - 'main'
