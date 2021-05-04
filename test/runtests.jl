@@ -1,4 +1,4 @@
-using Test, CatBoost
+using Test, CatBoost, Aqua
 
 EXAMPLES_DIR = joinpath(@__DIR__, "..", "examples")
 
@@ -8,3 +8,5 @@ for ex in readdir(EXAMPLES_DIR)
         include(joinpath(EXAMPLES_DIR, ex))
     end
 end
+
+Aqua.test_all(CatBoost; ambiguities=false)
