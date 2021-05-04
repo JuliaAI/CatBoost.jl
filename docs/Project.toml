@@ -1,0 +1,6 @@
+[deps]
+CatBoost = "e2e10f9a-a85d-4fa9-b6b2-639a32100a12"
+Documenter = "e30172f5-a6a5-5a46-863b-614d45cd2de4"
+
+[compat]
+Documenter = "0.24"
