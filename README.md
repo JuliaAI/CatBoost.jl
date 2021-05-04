@@ -9,8 +9,6 @@
 [codecov-url]: https://codecov.io/github/beacon-biosignals/CatBoost.jl?branch=main
 
 
-> add CatBoost
-
 Julia interface to [CatBoost](https://catboost.ai/).
 
 ## Setting up PyCall
