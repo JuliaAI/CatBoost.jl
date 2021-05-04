@@ -27,7 +27,8 @@ y_test /= max_relevance
 train = Pool(; data=x_train, label=y_train, group_id=queries_train)
 test = Pool(; data=x_test, label=y_test, group_id=queries_test)
 
-default_parameters = Dict("iterations" => 2000, "loss_function" => "RMSE",
+# small number of iterations to not slow down CI too much
+default_parameters = Dict("iterations" => 10, "loss_function" => "RMSE",
                           "custom_metric" => ["MAP:top=10", "PrecisionAt:top=10",
                                               "RecallAt:top=10"], "verbose" => false,
                           "random_seed" => 314159)
