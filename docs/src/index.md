@@ -7,3 +7,7 @@ For a nice introduction to the package, see the [examples](https://github.com/be
 ```@meta
 CurrentModule = CatBoost
 ```
+
+```@autodocs
+Modules = [CatBoost]
+```
