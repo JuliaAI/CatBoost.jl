@@ -1,4 +1,4 @@
-using Test, CatBoost, DataFrames
+using Test, CatBoost, DataFrames, PyCall
 using Aqua
 
 EXAMPLES_DIR = joinpath(@__DIR__, "..", "examples")
