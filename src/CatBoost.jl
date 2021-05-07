@@ -151,7 +151,8 @@ function pandas_to_df(pandas_df::PyObject)
         ret = c isa PyObject ? PyAny(c) : c
         return ret isa Int ? ret + 1 : ret
     end
-    df = DataFrame(Any[Array(getproperty(pandas_df, c).values) for c in colnames], map(Symbol, colnames))
+    df = DataFrame(Any[Array(getproperty(pandas_df, c).values) for c in colnames],
+                   map(Symbol, colnames))
     return df
 end
 
@@ -163,6 +164,5 @@ function load_dataset(dataset_name::Symbol)
     train, test = getproperty(catboost_datasets, dataset_name)()
     return train, test
 end
-
 
 end # module

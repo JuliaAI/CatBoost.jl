@@ -4,7 +4,7 @@ using Aqua
 EXAMPLES_DIR = joinpath(@__DIR__, "..", "examples")
 
 @testset "`to_pandas` and `pandas_to_df`" begin
-    df = DataFrame(floats = 0.5:0.5:3.0, ints=1:6)
+    df = DataFrame(; floats=0.5:0.5:3.0, ints=1:6)
     pd = CatBoost.to_pandas(df)
     @test pd isa PyObject
     df2 = pandas_to_df(pd)
@@ -19,6 +19,5 @@ end
         end
     end
 end
-
 
 Aqua.test_all(CatBoost; ambiguities=false)
