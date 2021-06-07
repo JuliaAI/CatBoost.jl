@@ -7,6 +7,20 @@ using OrderedCollections
 using Tables
 
 #####
+##### Exports
+#####
+
+export catboost
+
+export CatBoostRegressor, CatBoostClassifier
+export fit!, cv, predict, predict_proba
+export Pool
+export pandas_to_df
+
+# Datasets API.
+export load_dataset
+
+#####
 ##### _init_
 #####
 
@@ -137,9 +151,8 @@ function pandas_to_df(pandas_df::PyObject)
         ret = c isa PyObject ? PyAny(c) : c
         return ret isa Int ? ret + 1 : ret
     end
-    # Did the creators of PyCall seriously handle the conversion automatically? 
-    # What were they thinking?
-    df = DataFrame(Any[Array(pandas_df[c].values) for c in colnames], map(Symbol, colnames))
+    df = DataFrame(Any[Array(getproperty(pandas_df, c).values) for c in colnames],
+                   map(Symbol, colnames))
     return df
 end
 
@@ -151,19 +164,5 @@ function load_dataset(dataset_name::Symbol)
     train, test = getproperty(catboost_datasets, dataset_name)()
     return train, test
 end
-
-#####
-##### Exports
-#####
-
-export catboost
-
-export CatBoostRegressor, CatBoostClassifier
-export fit!, cv, predict, predict_proba
-export Pool
-export pandas_to_df
-
-# Datasets API.
-export load_dataset
 
 end # module
