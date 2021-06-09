@@ -49,7 +49,7 @@ function __init__()
                  Python Dependencies not installed
                  Please either:
                  - Rebuild PyCall to use Conda, by running in the julia REPL:
-                 - `ENV[PYTHON]=""; Pkg.build("PyCall"); Pkg.build("CatBoost")`
+                 - `ENV["PYTHON"]=""; Pkg.build("PyCall"); Pkg.build("CatBoost")`
                  - Or install the depencences, eg by running pip
                  - `pip install catboost pandas`
                  """)
