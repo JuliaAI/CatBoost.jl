@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>API Documentation · CatBoost.jl</title><link href="https://fonts.googleapis.com/css?family=Lato|Roboto+Mono" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.0/css/fontawesome.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.0/css/solid.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.0/css/brands.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.11.1/katex.min.css" rel="stylesheet" type="text/css"/><script>documenterBaseURL="."</script><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" data-main="assets/documenter.js"></script><script src="siteinfo.js"></script><script src="../versions.js"></script><link class="docs-theme-link" rel="stylesheet" type="text/css" href="assets/themes/documenter-dark.css" data-theme-name="documenter-dark" data-theme-primary-dark/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="assets/themes/documenter-light.css" data-theme-name="documenter-light" data-theme-primary/><script src="assets/themeswap.js"></script></head><body><div id="documenter"><nav class="docs-sidebar"><div class="docs-package-name"><span class="docs-autofit">CatBoost.jl</span></div><form class="docs-search" action="search/"><input class="docs-search-query" id="documenter-search-query" name="q" type="text" placeholder="Search docs"/></form><ul class="docs-menu"><li class="is-active"><a class="tocitem" href>API Documentation</a></li></ul><div class="docs-version-selector field has-addons"><div class="control"><span class="docs-label button is-static is-size-7">Version</span></div><div class="docs-selector control is-expanded"><div class="select is-fullwidth is-size-7"><select id="documenter-version-selector"></select></div></div></div></nav><div class="docs-main"><header class="docs-navbar"><nav class="breadcrumb"><ul class="is-hidden-mobile"><li class="is-active"><a href>API Documentation</a></li></ul><ul class="is-hidden-tablet"><li class="is-active"><a href>API Documentation</a></li></ul></nav><div class="docs-right"><a class="docs-edit-link" href="https://github.com/beacon-biosignals/CatBoost.jl/blob/master/docs/src/index.md" title="Edit on GitHub"><span class="docs-icon fab"></span><span class="docs-label is-hidden-touch">Edit on GitHub</span></a><a class="docs-settings-button fas fa-cog" id="documenter-settings-button" href="#" title="Settings"></a><a class="docs-sidebar-button fa fa-bars is-hidden-desktop" id="documenter-sidebar-button" href="#"></a></div></header><article class="content" id="documenter-page"><h1 id="API-Documentation"><a class="docs-heading-anchor" href="#API-Documentation">API Documentation</a><a id="API-Documentation-1"></a><a class="docs-heading-anchor-permalink" href="#API-Documentation" title="Permalink"></a></h1><p>Below is the API documentation for CatBoost.jl.</p><p>For a nice introduction to the package, see the <a href="https://github.com/beacon-biosignals/CatBoost.jl/blob/main/examples/">examples</a>.</p><article class="docstring"><header><a class="docstring-binding" id="CatBoost.Pool-Tuple{Any}" href="#CatBoost.Pool-Tuple{Any}"><code>CatBoost.Pool</code></a> — <span class="docstring-category">Method</span></header><section><div><pre><code class="language-julia">Pool(data; label=nothing, cat_features=nothing, text_features=nothing,
+     pairs=nothing, delimiter=&#39;	&#39;, has_header=false, weight=nothing,
+     group_id = nothing, group_weight=nothing, subgroup_id=nothing,
+     pairs_weight=nothing, baseline=nothing, features_names=nothing,
+     thread_count = -1) -&gt; PyObject</code></pre><p>Creates a <code>Pool</code> object holding training data and labels. <code>data</code> may also be passed as a keyword argument.</p></div><a class="docs-sourcelink" target="_blank" href="https://github.com/beacon-biosignals/CatBoost.jl/blob/4db3102558e90fadf708404197122568f2e59cc3/src/CatBoost.jl#L81-L91">source</a></section></article><article class="docstring"><header><a class="docstring-binding" id="CatBoost.cv" href="#CatBoost.cv"><code>CatBoost.cv</code></a> — <span class="docstring-category">Function</span></header><section><div><pre><code class="language-julia">cv(pool::PyObject; kwargs...) -&gt; DataFrame</code></pre><p>Accepts a <a href="#CatBoost.Pool-Tuple{Any}"><code>CatBoost.Pool</code></a> positional argument to specify the training data, and keyword arguments to configure the settings. See the python documentation below for what keyword arguments are accepted.</p><hr/><p><strong>Python documentation for <code>catboost.cv</code></strong></p><pre><code class="language-none">Cross-validate the CatBoost model.
+
+Parameters
+----------
+pool : catboost.Pool
+    Data to cross-validate on.
+
+params : dict
+    Parameters for CatBoost.
+    CatBoost has many of parameters, all have default values.
+    If  None, all params still defaults.
+    If  dict, overriding some (or all) params.
+
+dtrain : catboost.Pool or tuple (X, y)
+    Synonym for pool parameter. Only one of these parameters should be set.
+
+iterations : int
+    Number of boosting iterations. Can be set in params dict.
+
+num_boost_round : int
+    Synonym for iterations. Only one of these parameters should be set.
+
+fold_count : int, optional (default=3)
+    The number of folds to split the dataset into.
+
+nfold : int
+    Synonym for fold_count.
+
+type : string, optional (default=&#39;Classical&#39;)
+    Type of cross-validation
+    Possible values:
+        - &#39;Classical&#39;
+        - &#39;Inverted&#39;
+        - &#39;TimeSeries&#39;
+
+inverted : bool, optional (default=False)
+    Train on the test fold and evaluate the model on the training folds.
+
+partition_random_seed : int, optional (default=0)
+    Use this as the seed value for random permutation of the data.
+    Permutation is performed before splitting the data for cross validation.
+    Each seed generates unique data splits.
+
+seed : int, optional
+    Synonym for partition_random_seed. This parameter is deprecated. Use
+    partition_random_seed instead.
+    If both parameters are initialised partition_random_seed parameter is
+    ignored.
+
+shuffle : bool, optional (default=True)
+    Shuffle the dataset objects before splitting into folds.
+
+logging_level : string, optional (default=None)
+    Possible values:
+        - &#39;Silent&#39;
+        - &#39;Verbose&#39;
+        - &#39;Info&#39;
+        - &#39;Debug&#39;
+
+stratified : bool, optional (default=None)
+    Perform stratified sampling. True for classification and False otherwise.
+
+as_pandas : bool, optional (default=True)
+    Return pd.DataFrame when pandas is installed.
+    If False or pandas is not installed, return dict.
+
+metric_period : int, [default=1]
+    The frequency of iterations to print the information to stdout. The value should be a positive integer.
+
+verbose : bool or int
+    If verbose is bool, then if set to True, logging_level is set to Verbose,
+    if set to False, logging_level is set to Silent.
+    If verbose is int, it determines the frequency of writing metrics to output and
+    logging_level is set to Verbose.
+
+verbose_eval : bool or int
+    Synonym for verbose. Only one of these parameters should be set.
+
+plot : bool, optional (default=False)
+    If True, draw train and eval error in Jupyter notebook
+
+early_stopping_rounds : int
+    Activates Iter overfitting detector with od_wait set to early_stopping_rounds.
+
+save_snapshot : bool, [default=None]
+    Enable progress snapshotting for restoring progress after crashes or interruptions
+
+snapshot_file : string or pathlib.Path, [default=None]
+    Learn progress snapshot file path, if None will use default filename
+
+snapshot_interval: int, [default=600]
+    Interval between saving snapshots (seconds)
+
+metric_update_interval: float, [default=0.5]
+    Interval between updating metrics (seconds)
+
+folds: generator or iterator of (train_idx, test_idx) tuples, scikit-learn splitter object or None, optional (default=None)
+    If generator or iterator, it should yield the train and test indices for each fold.
+    If object, it should be one of the scikit-learn splitter classes
+    (https://scikit-learn.org/stable/modules/classes.html#splitter-classes)
+    and have ``split`` method.
+    if folds is not None, then all of fold_count, shuffle, partition_random_seed, inverted are None
+
+return_models: bool, optional (default=False)
+    if True, return a list of models fitted for each CV fold
+
+log_cout: output stream or callback for logging
+
+log_cerr: error stream or callback for logging
+
+Returns
+-------
+cv results : pandas.core.frame.DataFrame with cross-validation results
+    columns are: test-error-mean  test-error-std  train-error-mean  train-error-std
+cv models : list of trained models, if return_models=True</code></pre></div><a class="docs-sourcelink" target="_blank" href="https://github.com/beacon-biosignals/CatBoost.jl/blob/4db3102558e90fadf708404197122568f2e59cc3/src/CatBoost.jl#L59-L71">source</a></section></article><article class="docstring"><header><a class="docstring-binding" id="CatBoost.to_catboost-Tuple{Any}" href="#CatBoost.to_catboost-Tuple{Any}"><code>CatBoost.to_catboost</code></a> — <span class="docstring-category">Method</span></header><section><div><pre><code class="language-julia">to_catboost(arg)</code></pre><p><code>to_catboost</code> is called on each argument passed to <a href="@ref"><code>fit</code></a>, <a href="@ref"><code>predict</code></a>, <a href="@ref"><code>predict_proba</code></a>, and <a href="#CatBoost.cv"><code>cv</code></a> to allow customization of the conversion of Julia types to python types. If <code>to_catboost</code> emits a Julia type, then PyCall will try to convert it appropriately (automatically).</p><p>By default, <code>to_catboost</code> simply checks if the argument satisfies <code>Tables.istable(arg)</code>, and if so, it outputs a corresponding pandas table, and otherwise passes it on.</p><p>To customize the conversion for custom types, provide a method for this function.</p></div><a class="docs-sourcelink" target="_blank" href="https://github.com/beacon-biosignals/CatBoost.jl/blob/4db3102558e90fadf708404197122568f2e59cc3/src/CatBoost.jl#L121-L132">source</a></section></article></article><nav class="docs-footer"><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> on <span class="colophon-date" title="Wednesday 9 June 2021 14:30">Wednesday 9 June 2021</span>. Using Julia version 1.5.4.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
