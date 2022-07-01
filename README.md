@@ -1,6 +1,6 @@
 # CatBoost.jl
 
-[![Build Status][build-img]][build-url] [![CodeCov][codecov-img]][codecov-url] [![](https://img.shields.io/badge/docs-stable-blue.svg)](https://beacon-biosignals.github.io/CatBoost.jl/stable)
+[![Build Status][build-img]][build-url] [![CodeCov][codecov-img]][codecov-url] [![](https://img.shields.io/badge/docs-dev-blue.svg)](https://beacon-biosignals.github.io/CatBoost.jl/dev)
 
 [build-img]: https://github.com/beacon-biosignals/CatBoost.jl/workflows/CI/badge.svg
 [build-url]: https://github.com/beacon-biosignals/CatBoost.jl/actions
