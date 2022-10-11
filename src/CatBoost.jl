@@ -97,8 +97,7 @@ cv(pool::Py; kwargs...) = pandas_to_df(catboost.cv(pool; kwargs...))
     to_catboost(arg)
 
 `to_catboost` is called on each argument passed to [`fit`](@ref), [`predict`](@ref), [`predict_proba`](@ref), and [`cv`](@ref)
-to allow customization of the conversion of Julia types to python types. If `to_catboost` emits a Julia type, then
-PyCall will try to convert it appropriately (automatically).
+to allow customization of the conversion of Julia types to python types. 
 
 By default, `to_catboost` simply checks if the argument satisfies `Tables.istable(arg)`, and if so, it outputs
 a corresponding pandas table, and otherwise passes it on.
