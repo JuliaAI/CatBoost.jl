@@ -45,7 +45,9 @@ function __init__()
 
     $(@doc catboost.cv)
     """
-    return cv
+    cv
+
+    return nothing
 end
 
 #####
