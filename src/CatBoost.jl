@@ -27,7 +27,6 @@ const catboost = PythonCall.pynew()
 const catboost_datasets = PythonCall.pynew()
 const pandas = PythonCall.pynew()
 
-
 function __init__()
     PythonCall.pycopy!(catboost, pyimport("catboost"))
     PythonCall.pycopy!(catboost_datasets, pyimport("catboost.datasets"))
@@ -46,7 +45,7 @@ function __init__()
 
     $(@doc catboost.cv)
     """
-    cv
+    return cv
 end
 
 #####

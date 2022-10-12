@@ -5,8 +5,8 @@ using DataFrames
 using PythonCall
 
 train, test = load_dataset(:msrank_10k)
-train.sort_values(2, inplace=true)
-test.sort_values(2, inplace=true)
+train.sort_values(2; inplace=true)
+test.sort_values(2; inplace=true)
 x_train = train.drop([0, 1]; axis=1).values
 y_train = train[1].values
 queries_train = train[2].values
@@ -31,10 +31,10 @@ train = Pool(; data=x_train, label=y_train, group_id=queries_train)
 test = Pool(; data=x_test, label=y_test, group_id=queries_test)
 
 # small number of iterations to not slow down CI too much
-default_parameters = Dict("iterations" => 10, "loss_function" => "RMSE",
-                          "custom_metric" => ["MAP:top=10", "PrecisionAt:top=10",
-                                              "RecallAt:top=10"], "verbose" => false,
-                          "random_seed" => 314159) |> PyDict
+default_parameters = PyDict(Dict("iterations" => 10, "loss_function" => "RMSE",
+                                 "custom_metric" => ["MAP:top=10", "PrecisionAt:top=10",
+                                                     "RecallAt:top=10"], "verbose" => false,
+                                 "random_seed" => 314159))
 
 function fit_model(params, train_pool, test_pool)
     model = catboost.CatBoost(params)
