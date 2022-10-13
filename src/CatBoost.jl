@@ -111,7 +111,7 @@ to_catboost(arg) = Tables.istable(arg) ? to_pandas(arg) : arg
 all_to_catboost(args) = (to_catboost(arg) for arg in args)
 
 function to_pandas(tbl)
-    return pytable(tbl; format=:pandas)
+    return pytable(tbl, :pandas)
 end
 
 function pandas_to_df(pandas_df::Py)
