@@ -1,7 +1,7 @@
 name = "CatBoost"
 uuid = "e2e10f9a-a85d-4fa9-b6b2-639a32100a12"
 authors = ["Beacon Biosignals, Inc."]
-version = "0.1.2"
+version = "0.2.0"
 
 [deps]
 DataFrames = "a93c6f00-e57d-5684-b7b6-d8193f3e46c0"

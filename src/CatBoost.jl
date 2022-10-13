@@ -111,14 +111,11 @@ to_catboost(arg) = Tables.istable(arg) ? to_pandas(arg) : arg
 all_to_catboost(args) = (to_catboost(arg) for arg in args)
 
 function to_pandas(tbl)
-    pandas_df = pandas.DataFrame(eachcol(tbl)).T
-    pandas_df.columns = names(tbl)
-    return pandas_df
+    return pytable(tbl; format=:pandas)
 end
 
 function pandas_to_df(pandas_df::Py)
-    df = DataFrame(PyPandasDataFrame(pandas_df))
-    return df
+    return DataFrame(PyTable(pandas_df))
 end
 
 #####
