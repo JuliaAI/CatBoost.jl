@@ -1,12 +1,14 @@
 module Binary
 
-using CatBoost, DataFrames
+using CatBoost
+using DataFrames
+using PythonCall
 
 # Initialize data
-cat_features = [0, 1]
+cat_features = pylist([0, 1])
 train_data = DataFrame([["a", "a", "c"], ["b", "b", "d"], [1, 4, 30], [4, 5, 40],
                         [5, 6, 50], [6, 7, 60]], :auto)
-train_labels = [1, 1, -1]
+train_labels = pylist([1, 1, -1])
 eval_data = DataFrame([["a", "a"], ["b", "d"], [2, 1], [4, 4], [6, 50], [8, 60]], :auto)
 
 # Initialize CatBoostClassifier

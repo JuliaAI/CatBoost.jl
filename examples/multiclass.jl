@@ -1,17 +1,18 @@
 module MultiClass
 
 using CatBoost
+using PythonCall
 
-train_data = [["summer", 1924, 44], ["summer", 1932, 37], ["winter", 1980, 37],
-              ["summer", 2012, 204]]
+train_data = PyList([["summer", 1924, 44], ["summer", 1932, 37], ["winter", 1980, 37],
+                     ["summer", 2012, 204]])
 
-eval_data = [["winter", 1996, 197], ["winter", 1968, 37], ["summer", 2002, 77],
-             ["summer", 1948, 59]]
+eval_data = PyList([["winter", 1996, 197], ["winter", 1968, 37], ["summer", 2002, 77],
+                    ["summer", 1948, 59]])
 
-cat_features = [0]
+cat_features = PyList([0])
 
-train_label = ["France", "USA", "USA", "UK"]
-eval_label = ["USA", "France", "USA", "UK"]
+train_label = PyList(["France", "USA", "USA", "UK"])
+eval_label = PyList(["USA", "France", "USA", "UK"])
 
 train_dataset = Pool(; data=train_data, label=train_label, cat_features=cat_features)
 

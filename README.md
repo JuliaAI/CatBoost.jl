@@ -10,18 +10,6 @@
 
 Julia interface to [CatBoost](https://catboost.ai/).
 
-## Setting up PyCall
-
-Please follow the PyCall guidelines described in [PyCall.jl](https://github.com/JuliaPy/PyCall.jl).
-
-We highly recommend using a Julia-specific Python environment to handle dependencies. We recommend that users follow the build instructions in [Conda.jl](https://github.com/JuliaPy/Conda.jl).
-
-If users have installed [miniconda](https://docs.conda.io/en/latest/miniconda.html) on their local machine, we recommend checking out the Julia-specific Python environment (which is usually located at `$HOME/.julia/conda/3`) and installing `catboost` there with `pip`:
-
-```
-pip install catboost
-```
-
 ## Example
 
 ```julia
@@ -29,9 +17,9 @@ module Regression
 
 using CatBoost
 
-train_data = [[1, 4, 5, 6], [4, 5, 6, 7], [30, 40, 50, 60]]
-eval_data = [[2, 4, 6, 8], [1, 4, 50, 60]]
-train_labels = [10, 20, 30]
+train_data = PyList([[1, 4, 5, 6], [4, 5, 6, 7], [30, 40, 50, 60]])
+eval_data = PyList([[2, 4, 6, 8], [1, 4, 50, 60]])
+train_labels = PyList([10, 20, 30])
 
 # Initialize CatBoostRegressor
 model = CatBoostRegressor(iterations = 2, learning_rate = 1, depth = 2)

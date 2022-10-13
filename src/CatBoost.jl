@@ -1,7 +1,6 @@
 module CatBoost
 
-using PyCall
-using Conda
+using PythonCall
 using DataFrames
 using OrderedCollections
 using Tables
@@ -24,40 +23,17 @@ export load_dataset
 ##### _init_
 #####
 
-const catboost = PyNULL()
-const catboost_datasets = PyNULL()
-const pandas = PyNULL()
-
-function load_python_deps!()
-    copy!(catboost, pyimport("catboost"))
-    copy!(catboost_datasets, pyimport("catboost.datasets"))
-    copy!(pandas, pyimport("pandas"))
-    return nothing
-end
+const catboost = PythonCall.pynew()
+const catboost_datasets = PythonCall.pynew()
+const pandas = PythonCall.pynew()
 
 function __init__()
-    try
-        load_python_deps!()
-    catch ee
-        if PyCall.conda
-            Conda.pip_interop(true)
-            Conda.pip("install", ["catboost", "pandas"])
-            load_python_deps!()
-        else
-            typeof(ee) <: PyCall.PyError || rethrow(ee)
-            @warn("""
-                 Python Dependencies not installed
-                 Please either:
-                 - Rebuild PyCall to use Conda, by running in the julia REPL:
-                 - `ENV["PYTHON"]=""; Pkg.build("PyCall"); Pkg.build("CatBoost")`
-                 - Or install the depencences, eg by running pip
-                 - `pip install catboost pandas`
-                 """)
-        end
-    end
+    PythonCall.pycopy!(catboost, pyimport("catboost"))
+    PythonCall.pycopy!(catboost_datasets, pyimport("catboost.datasets"))
+    PythonCall.pycopy!(pandas, pyimport("pandas"))
 
     @doc """
-        cv(pool::PyObject; kwargs...) -> DataFrame
+        cv(pool::Py; kwargs...) -> DataFrame
 
     Accepts a [`CatBoost.Pool`](@ref) positional argument to specify the training data,
     and keyword arguments to configure the settings. See the python documentation below
@@ -83,7 +59,7 @@ end
          pairs=nothing, delimiter='\t', has_header=false, weight=nothing,
          group_id = nothing, group_weight=nothing, subgroup_id=nothing,
          pairs_weight=nothing, baseline=nothing, features_names=nothing,
-         thread_count = -1) -> PyObject
+         thread_count = -1) -> Py
 
 Creates a `Pool` object holding training data and labels. `data` may also be passed
 as a keyword argument.
@@ -112,7 +88,7 @@ end
 ##### Cross validation
 #####
 
-cv(pool::PyObject; kwargs...) = pandas_to_df(catboost.cv(pool; kwargs...))
+cv(pool::Py; kwargs...) = pandas_to_df(catboost.cv(pool; kwargs...))
 
 #####
 ##### Conversion utilities
@@ -122,8 +98,7 @@ cv(pool::PyObject; kwargs...) = pandas_to_df(catboost.cv(pool; kwargs...))
     to_catboost(arg)
 
 `to_catboost` is called on each argument passed to [`fit`](@ref), [`predict`](@ref), [`predict_proba`](@ref), and [`cv`](@ref)
-to allow customization of the conversion of Julia types to python types. If `to_catboost` emits a Julia type, then
-PyCall will try to convert it appropriately (automatically).
+to allow customization of the conversion of Julia types to python types. 
 
 By default, `to_catboost` simply checks if the argument satisfies `Tables.istable(arg)`, and if so, it outputs
 a corresponding pandas table, and otherwise passes it on.
@@ -135,25 +110,12 @@ to_catboost(arg) = Tables.istable(arg) ? to_pandas(arg) : arg
 # utility for calling `to_catboost` on each argument of a function
 all_to_catboost(args) = (to_catboost(arg) for arg in args)
 
-# the Julia-side code does not copy the columns, but the `pandas.DataFrame`
-# constructor seems to make a copy here. Maybe that can be avoided?
 function to_pandas(tbl)
-    # ensure we have a column table
-    col_table = Tables.columns(tbl)
-    # write it in a way that pandas will understand (after PyCall conversion)
-    dict_table = OrderedDict(col => Tables.getcolumn(col_table, col)
-                             for col in Tables.columnnames(col_table))
-    return pandas.DataFrame(; data=dict_table)
+    return pytable(tbl, :pandas)
 end
 
-function pandas_to_df(pandas_df::PyObject)
-    colnames = map(pandas_df.columns) do c
-        ret = c isa PyObject ? PyAny(c) : c
-        return ret isa Int ? ret + 1 : ret
-    end
-    df = DataFrame(Any[Array(getproperty(pandas_df, c).values) for c in colnames],
-                   map(Symbol, colnames))
-    return df
+function pandas_to_df(pandas_df::Py)
+    return DataFrame(PyTable(pandas_df))
 end
 
 #####
