@@ -1,12 +1,12 @@
 
-MMI.@mlj_model mutable struct CatBoostRegressor <: MMI.Deterministic
+MMI.@mlj_model mutable struct CatBoostClassifier <: MMI.Probabilistic
     iterations = nothing
     learning_rate = nothing
     depth = nothing
     l2_leaf_reg = nothing
     model_size_reg = nothing
     rsm = nothing
-    loss_function::String = "RMSE"
+    loss_function = nothing
     border_count = nothing
     feature_border_type = nothing
     per_float_feature_quantization = nothing
@@ -23,9 +23,7 @@ MMI.@mlj_model mutable struct CatBoostRegressor <: MMI.Deterministic
     thread_count = nothing
     random_seed = nothing
     use_best_model = nothing
-    best_model_min_trees = nothing
     verbose = nothing
-    silent = nothing
     logging_level = nothing
     metric_period = nothing
     ctr_leaf_count_limit = nothing
@@ -33,12 +31,15 @@ MMI.@mlj_model mutable struct CatBoostRegressor <: MMI.Deterministic
     max_ctr_complexity = nothing
     has_time = nothing
     allow_const_label = nothing
-    target_border = nothing
+    classes_count = nothing
+    class_weights = nothing
+    auto_class_weights = nothing
     one_hot_max_size = nothing
     random_strength = nothing
     name = nothing
     ignored_features = nothing
     train_dir = nothing
+    custom_loss = nothing
     custom_metric = nothing
     eval_metric = nothing
     bagging_temperature = nothing
@@ -48,7 +49,6 @@ MMI.@mlj_model mutable struct CatBoostRegressor <: MMI.Deterministic
     fold_len_multiplier = nothing
     used_ram_limit = nothing
     gpu_ram_part = nothing
-    pinned_memory_size = nothing
     allow_writing_files = nothing
     final_ctr_computation_mode = nothing
     approx_on_full_history = nothing
@@ -56,19 +56,13 @@ MMI.@mlj_model mutable struct CatBoostRegressor <: MMI.Deterministic
     simple_ctr = nothing
     combinations_ctr = nothing
     per_feature_ctr = nothing
-    ctr_description = nothing
-    ctr_target_border_count = nothing
     task_type = nothing
     device_config = nothing
     devices = nothing
     bootstrap_type = nothing
     subsample = nothing
-    mvs_reg = nothing
-    sampling_frequency = nothing
     sampling_unit = nothing
     dev_score_calc_obj_block_size = nothing
-    dev_efb_max_buckets = nothing
-    sparse_features_conflict_fraction = nothing
     max_depth = nothing
     n_estimators = nothing
     num_boost_round = nothing
@@ -79,6 +73,7 @@ MMI.@mlj_model mutable struct CatBoostRegressor <: MMI.Deterministic
     objective = nothing
     eta = nothing
     max_bin = nothing
+    scale_pos_weight = nothing
     gpu_cat_features_storage = nothing
     data_partition = nothing
     metadata = nothing
@@ -96,7 +91,6 @@ MMI.@mlj_model mutable struct CatBoostRegressor <: MMI.Deterministic
     feature_weights = nothing
     penalties_coefficient = nothing
     first_feature_use_penalties = nothing
-    per_object_feature_penalties = nothing
     model_shrink_rate = nothing
     model_shrink_mode = nothing
     langevin = nothing
@@ -108,15 +102,13 @@ MMI.@mlj_model mutable struct CatBoostRegressor <: MMI.Deterministic
     dictionaries = nothing
     feature_calcers = nothing
     text_processing = nothing
-    embedding_features = nothing
-    eval_fraction = nothing
 end
 
-function model_init(mlj_model::CatBoostRegressor)
-    return catboost.CatBoostRegressor(; mlj_to_kwargs(mlj_model)...)
+function model_init(mlj_model::CatBoostClassifier)
+    return catboost.CatBoostClassifier(; mlj_to_kwargs(mlj_model)...)
 end
 
-function MMI.fit(mlj_model::CatBoostRegressor, verbosity::Int, X, y)
+function MMI.fit(mlj_model::CatBoostClassifier, verbosity::Int, X, y)
     silent = verbosity > 0 ? false : true
 
     py_X = to_pandas(X)
@@ -131,11 +123,17 @@ function MMI.fit(mlj_model::CatBoostRegressor, verbosity::Int, X, y)
     return (model, cache, report)
 end
 
-MMI.fitted_params(::CatBoostRegressor, model) = (model=model,)
-MMI.reports_feature_importances(::Type{<:CatBoostRegressor}) = true
+MMI.fitted_params(::CatBoostClassifier, model) = (model=model,)
+MMI.reports_feature_importances(::Type{<:CatBoostClassifier}) = true
 
-function MMI.predict(mlj_model::CatBoostRegressor, model, Xnew)
+function MMI.predict(mlj_model::CatBoostClassifier, model, Xnew)
     py_preds = model.predict(to_pandas(Xnew))
+    preds = MMI.categorical(pyconvert(Array, py_preds))
+    return preds
+end
+
+function MMI.predict_mean(mlj_model::CatBoostClassifier, model, Xnew)
+    py_preds = model.predict_proba(to_pandas(Xnew))
     preds = pyconvert(Array, py_preds)
     return preds
 end

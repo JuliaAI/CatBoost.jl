@@ -51,6 +51,6 @@ end
 #####
 include("wrapper.jl")
 include("mlj_interface.jl")
-export CatBoostRegressor
+export CatBoostClassifier, CatBoostRegressor
 
 end # module

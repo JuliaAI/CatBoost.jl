@@ -5,7 +5,8 @@ using MLJBase
 using PythonCall
 using Test
 
-const EXAMPLES_DIR = joinpath(@__DIR__, "..", "examples")
+const PYTHON_API_EXAMPLES_DIR = joinpath(@__DIR__, "..", "examples/python_api")
+const MLJ_EXAMPLES_DIR = joinpath(@__DIR__, "..", "examples/mlj")
 
 @testset "`to_pandas` and `pandas_to_df`" begin
     df = DataFrame(; floats=0.5:0.5:3.0, ints=1:6)
@@ -15,22 +16,20 @@ const EXAMPLES_DIR = joinpath(@__DIR__, "..", "examples")
     @test df2 == df
 end
 
-@testset "CatBoostRegressor" begin
-    X = DataFrame(; a=[1, 4, 5, 6], b=[4, 5, 6, 7])
-    y = [2, 4, 6, 7]
-
-    # MLJ Interface
-    model = CatBoostRegressor()
-    mach = machine(model, X, y)
-    MLJBase.fit!(mach)
-    preds = MLJBase.predict(mach, X)
-end
-
-@testset "Examples" begin
-    for ex in readdir(EXAMPLES_DIR)
+@testset "Python API Examples" begin
+    for ex in readdir(PYTHON_API_EXAMPLES_DIR)
         @testset "$ex" begin
             # Just check the examples run, for now.
-            include(joinpath(EXAMPLES_DIR, ex))
+            include(joinpath(PYTHON_API_EXAMPLES_DIR, ex))
+        end
+    end
+end
+
+@testset "MLJ Examples" begin
+    for ex in readdir(MLJ_EXAMPLES_DIR)
+        @testset "$ex" begin
+            # Just check the examples run, for now.
+            include(joinpath(MLJ_EXAMPLES_DIR, ex))
         end
     end
 end
