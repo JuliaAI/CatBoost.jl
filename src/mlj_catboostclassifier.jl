@@ -112,7 +112,7 @@ function MMI.fit(mlj_model::CatBoostClassifier, verbosity::Int, X, y)
     silent = verbosity > 0 ? false : true
 
     py_X = to_pandas(X)
-    py_y = numpy.array(y)
+    py_y = numpy.array(Array(y))
 
     model = model_init(mlj_model)
     model.fit(py_X, py_y; silent=silent)
@@ -127,13 +127,14 @@ MMI.fitted_params(::CatBoostClassifier, model) = (model=model,)
 MMI.reports_feature_importances(::Type{<:CatBoostClassifier}) = true
 
 function MMI.predict(mlj_model::CatBoostClassifier, model, Xnew)
-    py_preds = model.predict(to_pandas(Xnew))
-    preds = MMI.categorical(pyconvert(Array, py_preds))
+    py_preds = model.predict_proba(CatBoost.to_pandas(Xnew))
+    classes = CatBoost.pyconvert(Array, model.classes_.tolist())
+    preds = CatBoost.MMI.UnivariateFinite(classes, CatBoost.pyconvert(Array, py_preds), pool=missing)
     return preds
 end
 
 function MMI.predict_mean(mlj_model::CatBoostClassifier, model, Xnew)
-    py_preds = model.predict_proba(to_pandas(Xnew))
+    py_preds = predict(model, to_pandas(Xnew))
     preds = pyconvert(Array, py_preds)
     return preds
 end
