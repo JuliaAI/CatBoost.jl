@@ -60,8 +60,8 @@ y = [0, 0, 1, 1]
 model = CatBoost.CatBoostClassifier(iterations=5)
 mach = machine(model, X, y)
 MLJBase.fit!(mach)
-preds = MLJBase.predict(mach, X)
-probs = MLJBase.predict_mean(mach, X)
+probs = MLJBase.predict(mach, X)
+preds = MLJBase.predict_mean(mach, X)
 ```
 
 See also

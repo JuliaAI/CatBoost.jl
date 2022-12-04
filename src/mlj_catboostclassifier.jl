@@ -129,7 +129,8 @@ MMI.reports_feature_importances(::Type{<:CatBoostClassifier}) = true
 function MMI.predict(mlj_model::CatBoostClassifier, model, Xnew)
     py_preds = model.predict_proba(CatBoost.to_pandas(Xnew))
     classes = CatBoost.pyconvert(Array, model.classes_.tolist())
-    preds = CatBoost.MMI.UnivariateFinite(classes, CatBoost.pyconvert(Array, py_preds), pool=missing)
+    preds = CatBoost.MMI.UnivariateFinite(classes, CatBoost.pyconvert(Array, py_preds);
+                                          pool=missing)
     return preds
 end
 
