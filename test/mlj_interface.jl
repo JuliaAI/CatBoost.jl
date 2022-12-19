@@ -21,6 +21,9 @@
         MLJBase.fit!(mach)
         preds = MLJBase.predict(mach, X)
         probs = MLJBase.predict_mean(mach, X)
+
+        serializable_fitresult = MLJBase.save(mach, mach.fitresult)
+        restored_fitresult = MLJBase.restore(mach, serializable_fitresult)
     end
 
     @testset "CatBoostRegressor" begin
@@ -32,6 +35,9 @@
         mach = machine(model, X, y)
         MLJBase.fit!(mach)
         preds = MLJBase.predict(mach, X)
+
+        serializable_fitresult = MLJBase.save(mach, mach.fitresult)
+        restored_fitresult = MLJBase.restore(mach, serializable_fitresult)
     end
 
     @testset "generic interface tests" begin
