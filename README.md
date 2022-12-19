@@ -23,7 +23,7 @@ eval_data = PyList([[2, 4, 6, 8], [1, 4, 50, 60]])
 train_labels = PyList([10, 20, 30])
 
 # Initialize CatBoostRegressor
-model = PyCatBoostRegressor(iterations = 2, learning_rate = 1, depth = 2)
+model = CatBoostRegressor(iterations = 2, learning_rate = 1, depth = 2)
 
 # Fit model
 fit!(model, train_data, train_labels)

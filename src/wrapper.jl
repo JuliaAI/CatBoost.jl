@@ -24,8 +24,8 @@ Pool(; kwargs...) = catboost.Pool(; (k => to_catboost(v) for (k, v) in pairs(kwa
 ##### Python Models
 #####
 
-PyCatBoostRegressor(args...; kwargs...) = catboost.CatBoostRegressor(args...; kwargs...)
-PyCatBoostClassifier(args...; kwargs...) = catboost.CatBoostClassifier(args...; kwargs...)
+CatBoostRegressor(args...; kwargs...) = catboost.CatBoostRegressor(args...; kwargs...)
+CatBoostClassifier(args...; kwargs...) = catboost.CatBoostClassifier(args...; kwargs...)
 
 fit!(cbm::Py, args...; kwargs...) = cbm.fit(all_to_catboost(args)...; kwargs...)
 

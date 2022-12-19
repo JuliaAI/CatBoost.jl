@@ -127,10 +127,9 @@ MMI.fitted_params(::CatBoostClassifier, model) = (model=model,)
 MMI.reports_feature_importances(::Type{<:CatBoostClassifier}) = true
 
 function MMI.predict(mlj_model::CatBoostClassifier, model, Xnew)
-    py_preds = model.predict_proba(CatBoost.to_pandas(Xnew))
-    classes = CatBoost.pyconvert(Array, model.classes_.tolist())
-    preds = CatBoost.MMI.UnivariateFinite(classes, CatBoost.pyconvert(Array, py_preds);
-                                          pool=missing)
+    py_preds = predict_proba(model, to_pandas(Xnew))
+    classes = pyconvert(Array, model.classes_.tolist())
+    preds = MMI.UnivariateFinite(classes, pyconvert(Array, py_preds); pool=missing)
     return preds
 end
 

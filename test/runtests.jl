@@ -1,5 +1,4 @@
 using Aqua
-using CatBoost
 using DataFrames
 using MLJBase
 using MLJTestInterface

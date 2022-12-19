@@ -1,6 +1,6 @@
 module Binary
 
-using CatBoost
+using CatBoost.MLJInterface
 using DataFrames
 using MLJBase
 using PythonCall

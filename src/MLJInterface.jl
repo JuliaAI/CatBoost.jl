@@ -1,4 +1,15 @@
 
+module MLJInterface
+
+using ..CatBoost: catboost, numpy, to_pandas, feature_importances, predict, predict_proba
+using PythonCall
+using Tables
+
+using MLJModelInterface: MLJModelInterface
+const MMI = MLJModelInterface
+using MLJModelInterface: Table, Continuous, Count, Finite, OrderedFactor, Multiclass
+const PKG = "CatBoost"
+
 """
     mlj_to_kwargs(model)
 
@@ -39,11 +50,17 @@ MMI.metadata_model(CatBoostClassifier;
                                                  MMI.OrderedFactor),
                                        AbstractMatrix{MMI.Continuous}},
                    target_scitype=AbstractVector{<:MMI.Finite},
-                   human_name="CatBoost classifier", load_path="$PKG.CatBoostClassifier")
+                   human_name="CatBoost classifier",
+                   load_path="$PKG.MLJInterface.CatBoostClassifier")
 
 MMI.metadata_model(CatBoostRegressor;
                    input_scitype=Union{MMI.Table(MMI.Continuous, MMI.Count,
                                                  MMI.OrderedFactor),
                                        AbstractMatrix{MMI.Continuous}},
                    target_scitype=AbstractVector{<:MMI.Continuous},
-                   human_name="CatBoost regressor", load_path="$PKG.CatBoostRegressor")
+                   human_name="CatBoost regressor",
+                   load_path="$PKG.MLJInterface.CatBoostRegressor")
+
+export CatBoostClassifier, CatBoostRegressor
+
+end

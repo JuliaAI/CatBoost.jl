@@ -135,7 +135,7 @@ MMI.fitted_params(::CatBoostRegressor, model) = (model=model,)
 MMI.reports_feature_importances(::Type{<:CatBoostRegressor}) = true
 
 function MMI.predict(mlj_model::CatBoostRegressor, model, Xnew)
-    py_preds = model.predict(to_pandas(Xnew))
+    py_preds = predict(model, to_pandas(Xnew))
     preds = pyconvert(Array, py_preds)
     return preds
 end

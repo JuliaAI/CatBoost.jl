@@ -19,8 +19,8 @@ train_dataset = Pool(; data=train_data, label=train_label, cat_features=cat_feat
 eval_dataset = Pool(; data=eval_data, label=eval_label, cat_features=cat_features)
 
 # Initialize CatBoostClassifier
-model = PyCatBoostClassifier(; iterations=10, learning_rate=1, depth=2,
-                             loss_function="MultiClass")
+model = CatBoostClassifier(; iterations=10, learning_rate=1, depth=2,
+                           loss_function="MultiClass")
 
 # Fit model
 fit!(model, train_dataset)

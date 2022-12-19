@@ -5,11 +5,6 @@ using DataFrames
 using OrderedCollections
 using Tables
 
-using MLJModelInterface: MLJModelInterface
-const MMI = MLJModelInterface
-using MLJModelInterface: Table, Continuous, Count, Finite, OrderedFactor, Multiclass
-const PKG = "CatBoost"
-
 #####
 ##### _init_
 #####
@@ -38,7 +33,7 @@ end
 include("wrapper.jl")
 
 export catboost
-export PyCatBoostRegressor, PyCatBoostClassifier
+export CatBoostRegressor, CatBoostClassifier
 export fit!, cv, predict, predict_proba
 export Pool
 export pandas_to_df
@@ -48,7 +43,6 @@ export load_dataset
 #####
 ##### MLJ
 #####
-include("mlj_interface.jl")
-export CatBoostClassifier, CatBoostRegressor
+include("MLJInterface.jl")
 
 end # module
