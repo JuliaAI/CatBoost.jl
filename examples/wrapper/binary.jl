@@ -13,6 +13,7 @@ eval_data = DataFrame([["a", "a"], ["b", "d"], [2, 1], [4, 4], [6, 50], [8, 60]]
 
 # Initialize CatBoostClassifier
 model = CatBoostClassifier(; iterations=2, learning_rate=1, depth=2)
+
 # Fit model
 fit!(model, train_data, train_labels, cat_features)
 

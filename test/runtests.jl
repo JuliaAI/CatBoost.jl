@@ -5,10 +5,10 @@ using MLJTestInterface
 using PythonCall
 using Test
 
-const PYTHON_API_EXAMPLES_DIR = joinpath(@__DIR__, "..", "examples/python_api")
+const WRAPPER_EXAMPLES_DIR = joinpath(@__DIR__, "..", "examples/wrapper")
 const MLJ_EXAMPLES_DIR = joinpath(@__DIR__, "..", "examples/mlj")
 
-include("python_api.jl")
+include("wrapper.jl")
 include("mlj_interface.jl")
 
 Aqua.test_all(CatBoost; ambiguities=false)

@@ -3,6 +3,6 @@
 Below is the MLJ API documentation for CatBoost.jl.
 
 ```@docs
-CatBoostClassifier
-CatBoostRegressor
+CatBoost.MLJInterface.CatBoostClassifier
+CatBoost.MLJInterface.CatBoostRegressor
 ```
