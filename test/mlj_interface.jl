@@ -1,6 +1,6 @@
 
 @testset "MLJ Interface" begin
-    using CatBoost.MLJInterface: CatBoostRegressor, CatBoostClassifier
+    using CatBoost.MLJCatBoostInterface: CatBoostRegressor, CatBoostClassifier
 
     @testset "MLJ Examples" begin
         for ex in readdir(MLJ_EXAMPLES_DIR)

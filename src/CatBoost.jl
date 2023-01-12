@@ -43,6 +43,6 @@ export load_dataset
 #####
 ##### MLJ
 #####
-include("MLJInterface.jl")
+include("MLJCatBoostInterface.jl")
 
 end # module

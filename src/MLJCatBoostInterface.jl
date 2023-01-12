@@ -1,5 +1,5 @@
 
-module MLJInterface
+module MLJCatBoostInterface
 
 using ..CatBoost: catboost, numpy, to_pandas, feature_importances, predict, predict_proba
 using PythonCall
@@ -49,9 +49,10 @@ MMI.metadata_model(CatBoostClassifier;
                    input_scitype=Union{MMI.Table(MMI.Continuous, MMI.Count,
                                                  MMI.OrderedFactor),
                                        AbstractMatrix{MMI.Continuous}},
-                   target_scitype=AbstractVector{<:MMI.Finite},
+                   target_scitype=Union{AbstractVector{<:MMI.Finite},
+                                        AbstractVector{<:MMI.Continuous}},
                    human_name="CatBoost classifier",
-                   load_path="$PKG.MLJInterface.CatBoostClassifier")
+                   load_path="$PKG.MLJCatBoostInterface.CatBoostClassifier")
 
 MMI.metadata_model(CatBoostRegressor;
                    input_scitype=Union{MMI.Table(MMI.Continuous, MMI.Count,
@@ -59,7 +60,7 @@ MMI.metadata_model(CatBoostRegressor;
                                        AbstractMatrix{MMI.Continuous}},
                    target_scitype=AbstractVector{<:MMI.Continuous},
                    human_name="CatBoost regressor",
-                   load_path="$PKG.MLJInterface.CatBoostRegressor")
+                   load_path="$PKG.MLJCatBoostInterface.CatBoostRegressor")
 
 export CatBoostClassifier, CatBoostRegressor
 
