@@ -57,7 +57,7 @@ function prepare_input(X)
     end
 
     cat_features = get_dtype_feature_ix(X, Multiclass) .- 1 # convert to 0 based indexing
-    text_features = get_dtype_feature_ix(X, AbstractString) .- 1 # convert to 0 based indexing
+    text_features = get_dtype_feature_ix(X, Textual) .- 1 # convert to 0 based indexing
 
     return X, cat_features, text_features
 end
