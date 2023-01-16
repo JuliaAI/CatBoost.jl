@@ -131,7 +131,7 @@ function MMI.predict(mlj_model::CatBoostClassifier, model, Xnew)
     return preds
 end
 
-function MMI.predict_mean(mlj_model::CatBoostClassifier, model, Xnew)
+function MMI.predict_mode(mlj_model::CatBoostClassifier, model, Xnew)
     py_preds = predict(model, to_pandas(Xnew))
     preds = pyconvert(Array, py_preds)
     return preds

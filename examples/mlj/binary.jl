@@ -22,7 +22,7 @@ mach = machine(model, train_data, train_labels)
 MLJBase.fit!(mach)
 
 # Get predicted classes
-preds_class = MLJBase.predict_mean(mach, eval_data)
+preds_class = MLJBase.predict_mode(mach, eval_data)
 
 # Get predicted probabilities for each class
 preds_proba = MLJBase.predict(mach, eval_data)

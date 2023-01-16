@@ -43,7 +43,7 @@ Returns
 - `Vector{Int64}`
 """
 function get_dtype_feature_ix(X, dtype)
-    return findall(eltype.(MMI.scitype.(eachcol(X))) .<: dtype)
+    return findall(MMI.schema(X).scitypes .<: dtype)
 end
 
 """
@@ -52,7 +52,8 @@ get_cat_features
 """
 function prepare_input(X)
     order_factor_ix = get_dtype_feature_ix(X, OrderedFactor)
-    for col in names(X)[order_factor_ix]
+    columns = MMI.schema(X).names
+    for col in columns[order_factor_ix]
         X[:, col] = MMI.int(X[:, col])
     end
 

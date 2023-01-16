@@ -32,7 +32,7 @@ https://catboost.ai/en/docs/concepts/python-reference_catboostclassifier#paramet
 - `predict(mach, Xnew)`: return predictions of the target given new
   features `Xnew` having the same scitype as `X` above.
 
-- `predict_mean(mach, Xnew)`: return predicted probabilities of the 
+- `predict_mode(mach, Xnew)`: return predicted probabilities of the 
   target given new features `Xnew` having the same scitype as `X` above.
 
 # Fitted parameters
@@ -61,7 +61,7 @@ model = CatBoost.CatBoostClassifier(iterations=5)
 mach = machine(model, X, y)
 MLJBase.fit!(mach)
 probs = MLJBase.predict(mach, X)
-preds = MLJBase.predict_mean(mach, X)
+preds = MLJBase.predict_mode(mach, X)
 ```
 
 See also

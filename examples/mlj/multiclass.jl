@@ -8,7 +8,7 @@ using PythonCall
 # Initialize data
 train_data = DataFrame([coerce(["a", "a", "c"], MLJBase.Multiclass),
                         coerce(["b", "b", "d"], MLJBase.Multiclass),
-                        coerce([0, 0, 1], OrderedFactor), [4, 5, 40], [5, 6, 50],
+                        coerce([0, 0, 1], MLJBase.OrderedFactor), [4, 5, 40], [5, 6, 50],
                         [6, 7, 60]], :auto)
 train_labels = coerce([1, 0, -1], MLJBase.Multiclass)
 eval_data = DataFrame([coerce(["a", "a"], MLJBase.Multiclass),
@@ -23,7 +23,7 @@ mach = machine(model, train_data, train_labels)
 MLJBase.fit!(mach)
 
 # Get predicted classes
-preds_class = MLJBase.predict_mean(mach, eval_data)
+preds_class = MLJBase.predict_mode(mach, eval_data)
 
 # Get predicted probabilities for each class
 preds_proba = MLJBase.predict(mach, eval_data)
