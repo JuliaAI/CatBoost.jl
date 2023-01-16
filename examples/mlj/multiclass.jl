@@ -1,4 +1,4 @@
-module Binary
+module Multiclass
 
 using CatBoost.MLJCatBoostInterface
 using DataFrames
@@ -6,13 +6,14 @@ using MLJBase
 using PythonCall
 
 # Initialize data
-train_data = DataFrame([coerce(["a", "a", "c"], Multiclass),
-                        coerce(["b", "b", "d"], Multiclass),
+train_data = DataFrame([coerce(["a", "a", "c"], MLJBase.Multiclass),
+                        coerce(["b", "b", "d"], MLJBase.Multiclass),
                         coerce([0, 0, 1], OrderedFactor), [4, 5, 40], [5, 6, 50],
                         [6, 7, 60]], :auto)
-train_labels = coerce([1, 1, -1], OrderedFactor)
-eval_data = DataFrame([coerce(["a", "a"], Multiclass), coerce(["b", "d"], Multiclass),
-                       coerce([0, 0], OrderedFactor), [4, 4], [6, 50], [8, 60]], :auto)
+train_labels = coerce([1, 0, -1], MLJBase.Multiclass)
+eval_data = DataFrame([coerce(["a", "a"], MLJBase.Multiclass),
+                       coerce(["b", "d"], MLJBase.Multiclass), [2, 1], [4, 4], [6, 50],
+                       [8, 60]], :auto)
 
 # Initialize CatBoostClassifier
 model = CatBoostClassifier(; iterations=2, learning_rate=1, depth=2)

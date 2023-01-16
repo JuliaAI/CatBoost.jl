@@ -24,8 +24,6 @@ MMI.@mlj_model mutable struct CatBoostRegressor <: MMI.Deterministic
     random_seed = nothing
     use_best_model = nothing
     best_model_min_trees = nothing
-    verbose = nothing
-    silent = nothing
     logging_level = nothing
     metric_period = nothing
     ctr_leaf_count_limit = nothing
@@ -83,7 +81,6 @@ MMI.@mlj_model mutable struct CatBoostRegressor <: MMI.Deterministic
     data_partition = nothing
     metadata = nothing
     early_stopping_rounds = nothing
-    cat_features = nothing
     grow_policy = nothing
     min_data_in_leaf = nothing
     min_child_samples = nothing
@@ -103,7 +100,6 @@ MMI.@mlj_model mutable struct CatBoostRegressor <: MMI.Deterministic
     diffusion_temperature = nothing
     posterior_sampling = nothing
     boost_from_average = nothing
-    text_features = nothing
     tokenizers = nothing
     dictionaries = nothing
     feature_calcers = nothing
@@ -112,18 +108,19 @@ MMI.@mlj_model mutable struct CatBoostRegressor <: MMI.Deterministic
     eval_fraction = nothing
 end
 
-function model_init(mlj_model::CatBoostRegressor)
-    return catboost.CatBoostRegressor(; mlj_to_kwargs(mlj_model)...)
+function model_init(mlj_model::CatBoostRegressor; kw...)
+    return catboost.CatBoostRegressor(; mlj_to_kwargs(mlj_model)..., kw...)
 end
 
 function MMI.fit(mlj_model::CatBoostRegressor, verbosity::Int, X, y)
-    silent = verbosity > 0 ? false : true
+    verbose = verbosity > 0 ? false : true
 
-    py_X = to_pandas(X)
+    X_preprocessed, cat_features, text_features = prepare_input(X)
+    py_X = to_pandas(X_preprocessed)
     py_y = numpy.array(y)
 
-    model = model_init(mlj_model)
-    model.fit(py_X, py_y; silent=silent)
+    model = model_init(mlj_model; cat_features, text_features, verbose)
+    model.fit(py_X, py_y)
 
     cache = nothing
     report = (feature_importances=feature_importances(model),)

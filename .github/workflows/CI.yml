@@ -28,6 +28,7 @@ jobs:
         version:
           - '1.6'
           - '1' 
+          - 'nightly'
         os:
           - ubuntu-latest
         arch:

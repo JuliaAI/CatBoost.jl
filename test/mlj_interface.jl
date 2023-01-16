@@ -13,7 +13,7 @@
 
     @testset "CatBoostClassifier" begin
         X = DataFrame(; a=[1, 4, 5, 6], b=[4, 5, 6, 7])
-        y = [0, 0, 1, 1]
+        y = coerce([0, 0, 1, 1], OrderedFactor)
 
         # MLJ Interface
         model = CatBoostClassifier(; iterations=5)
@@ -42,15 +42,19 @@
 
     @testset "generic interface tests" begin
         @testset "CatBoostRegressor" begin
-            failures, summary = MLJTestInterface.test([CatBoostRegressor],
-                                                      MLJTestInterface.make_regression()...;
+            data = MLJTestInterface.make_regression()
+            X = DataFrame(data[1])
+            y = data[2]
+            failures, summary = MLJTestInterface.test([CatBoostRegressor], X, y;
                                                       mod=@__MODULE__, verbosity=0, # bump to debug
                                                       throw=false)
             @test isempty(failures)
         end
         @testset "CatBoostClassifier" begin
             for data in [MLJTestInterface.make_binary(), MLJTestInterface.make_multiclass()]
-                failures, summary = MLJTestInterface.test([CatBoostClassifier], data...;
+                X = DataFrame(data[1])
+                y = data[2]
+                failures, summary = MLJTestInterface.test([CatBoostClassifier], X, y;
                                                           mod=@__MODULE__, verbosity=0, # bump to debug
                                                           throw=false)
                 @test isempty(failures)

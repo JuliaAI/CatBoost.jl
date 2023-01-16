@@ -28,6 +28,40 @@ function mlj_to_kwargs(model)
                             for name in fieldnames(typeof(model)))
 end
 
+"""
+    get_dtype_feature_ix(X, dtype)
+
+Get the index of the columns with a specific dtype
+
+Parameters
+----------
+- `X`: Table
+- `dtype`: DataType 
+
+Returns
+-------
+- `Vector{Int64}`
+"""
+function get_dtype_feature_ix(X, dtype)
+    return findall(eltype.(MMI.scitype.(eachcol(X))) .<: dtype)
+end
+
+"""
+Get cat features for model
+get_cat_features
+"""
+function prepare_input(X)
+    order_factor_ix = get_dtype_feature_ix(X, OrderedFactor)
+    for col in names(X)[order_factor_ix]
+        X[:, col] = MMI.int(X[:, col])
+    end
+
+    cat_features = get_dtype_feature_ix(X, Multiclass) .- 1 # convert to 0 based indexing
+    text_features = get_dtype_feature_ix(X, AbstractString) .- 1 # convert to 0 based indexing
+
+    return X, cat_features, text_features
+end
+
 include("mlj_catboostclassifier.jl")
 include("mlj_catboostregressor.jl")
 
@@ -47,16 +81,15 @@ MMI.metadata_pkg.((CatBoostClassifier, CatBoostRegressor), name="CatBoost.jl",
 
 MMI.metadata_model(CatBoostClassifier;
                    input_scitype=Union{MMI.Table(MMI.Continuous, MMI.Count,
-                                                 MMI.OrderedFactor),
+                                                 MMI.OrderedFactor, MMI.Multiclass),
                                        AbstractMatrix{MMI.Continuous}},
-                   target_scitype=Union{AbstractVector{<:MMI.Finite},
-                                        AbstractVector{<:MMI.Continuous}},
+                   target_scitype=Union{AbstractVector{<:MMI.Finite}},
                    human_name="CatBoost classifier",
                    load_path="$PKG.MLJCatBoostInterface.CatBoostClassifier")
 
 MMI.metadata_model(CatBoostRegressor;
                    input_scitype=Union{MMI.Table(MMI.Continuous, MMI.Count,
-                                                 MMI.OrderedFactor),
+                                                 MMI.OrderedFactor, MMI.Multiclass),
                                        AbstractMatrix{MMI.Continuous}},
                    target_scitype=AbstractVector{<:MMI.Continuous},
                    human_name="CatBoost regressor",
