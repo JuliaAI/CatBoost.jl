@@ -61,7 +61,6 @@ function prepare_input(X)
 
     order_factor_cols = columns[get_dtype_feature_ix(table_input, OrderedFactor)]
     new_columns = Dict([col => MMI.int(table_input[col]) for col in order_factor_cols]...)
-    keep_columns = [i for i in columns if all(i .!= keys(new_columns))]
     table_input = (; drop_cols(table_input, order_factor_cols)..., new_columns...)
 
     cat_features = get_dtype_feature_ix(table_input, Multiclass) .- 1 # convert to 0 based indexing
