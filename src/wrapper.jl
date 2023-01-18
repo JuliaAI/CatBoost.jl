@@ -43,7 +43,7 @@ end
 ##### Cross validation
 #####
 
-cv(pool::Py; kwargs...) = pandas_to_df(catboost.cv(pool; kwargs...))
+cv(pool::Py; kwargs...) = pandas_to_tbl(catboost.cv(pool; kwargs...))
 
 #####
 ##### Conversion utilities
@@ -75,18 +75,18 @@ function to_pandas(tbl)
 end
 
 function to_pandas(X::AbstractArray)
-    tbl = DataFrame(X, :auto)
+    tbl = Tables.columntable(X)
     return to_pandas(tbl)
 end
 
 """
-    pandas_to_df(pandas_df::Py)
+    pandas_to_tbl(pandas_df::Py)
 
-Convert a pandas dataframe into a DataFrames.jl dataframe
+Convert a pandas dataframe into a Tables.jl columntable
 """
-function pandas_to_df(pandas_df::Py)
-    df = DataFrame(PyTable(pandas_df))
-    return df
+function pandas_to_tbl(pandas_df::Py)
+    tbl = Tables.columntable(PyTable(pandas_df))
+    return tbl
 end
 
 #####
@@ -102,7 +102,7 @@ function feature_importances(py_model)
     py_df_importance = pandas.DataFrame()
     py_df_importance["name"] = py_model.feature_names_
     py_df_importance["importance"] = py_model.feature_importances_
-    return pandas_to_df(py_df_importance)
+    return pandas_to_tbl(py_df_importance)
 end
 
 #####

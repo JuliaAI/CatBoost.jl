@@ -1,7 +1,6 @@
 module CatBoost
 
 using PythonCall
-using DataFrames
 using OrderedCollections
 using Tables
 
@@ -36,7 +35,7 @@ export catboost
 export CatBoostRegressor, CatBoostClassifier
 export fit!, cv, predict, predict_proba
 export Pool
-export pandas_to_df
+export pandas_to_tbl
 # Datasets API
 export load_dataset
 

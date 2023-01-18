@@ -43,18 +43,14 @@
     @testset "generic interface tests" begin
         @testset "CatBoostRegressor" begin
             data = MLJTestInterface.make_regression()
-            X = DataFrame(data[1])
-            y = data[2]
-            failures, summary = MLJTestInterface.test([CatBoostRegressor], X, y;
+            failures, summary = MLJTestInterface.test([CatBoostRegressor], data...;
                                                       mod=@__MODULE__, verbosity=0, # bump to debug
                                                       throw=false)
             @test isempty(failures)
         end
         @testset "CatBoostClassifier" begin
             for data in [MLJTestInterface.make_binary(), MLJTestInterface.make_multiclass()]
-                X = DataFrame(data[1])
-                y = data[2]
-                failures, summary = MLJTestInterface.test([CatBoostClassifier], X, y;
+                failures, summary = MLJTestInterface.test([CatBoostClassifier], data...;
                                                           mod=@__MODULE__, verbosity=0, # bump to debug
                                                           throw=false)
                 @test isempty(failures)

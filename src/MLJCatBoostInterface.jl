@@ -51,16 +51,18 @@ Get cat features for model
 get_cat_features
 """
 function prepare_input(X)
-    order_factor_ix = get_dtype_feature_ix(X, OrderedFactor)
-    columns = MMI.schema(X).names
-    for col in columns[order_factor_ix]
-        X[:, col] = MMI.int(X[:, col])
-    end
+    table_input = Tables.columntable(X)
+    columns = Tables.columnnames(table_input)
 
-    cat_features = get_dtype_feature_ix(X, Multiclass) .- 1 # convert to 0 based indexing
-    text_features = get_dtype_feature_ix(X, MMI.Textual) .- 1 # convert to 0 based indexing
+    order_factor_ix = get_dtype_feature_ix(table_input, OrderedFactor)
+    new_columns = Dict([col => Vector{Int64}(table_input[col]) for col in
+                                                                   columns[order_factor_ix]]...)
+    table_input = (; table_input..., new_columns...)
 
-    return X, cat_features, text_features
+    cat_features = get_dtype_feature_ix(table_input, Multiclass) .- 1 # convert to 0 based indexing
+    text_features = get_dtype_feature_ix(table_input, MMI.Textual) .- 1 # convert to 0 based indexing
+
+    return table_input, cat_features, text_features
 end
 
 include("mlj_catboostclassifier.jl")

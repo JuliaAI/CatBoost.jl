@@ -1,12 +1,12 @@
 
 @testset "Python Wrapper" begin
     using CatBoost
-    @testset "`to_pandas` and `pandas_to_df`" begin
-        df = DataFrame(; floats=0.5:0.5:3.0, ints=1:6)
-        pd = CatBoost.to_pandas(df)
-        @test pd isa Py
-        df2 = pandas_to_df(pd)
-        @test df2 == df
+    @testset "`to_pandas` and `pandas_to_tbl`" begin
+        tbl = Tables.columntable((floats=0.5:0.5:3.0, ints=1:6))
+        pd_df = CatBoost.to_pandas(tbl)
+        @test pd_df isa Py
+        tbl2 = pandas_to_tbl(pd_df)
+        @test tbl2 == tbl
     end
 
     @testset "Python Wrapper Examples" begin

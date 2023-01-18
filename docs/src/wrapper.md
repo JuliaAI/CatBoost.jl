@@ -9,7 +9,7 @@ CatBoost.CatBoostRegressor
 cv
 to_catboost
 to_pandas
-pandas_to_df
+pandas_to_tbl
 feature_importance
 load_dataset
 ```
