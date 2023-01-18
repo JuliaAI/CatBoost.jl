@@ -55,9 +55,10 @@ function prepare_input(X)
     columns = Tables.columnnames(table_input)
 
     order_factor_ix = get_dtype_feature_ix(table_input, OrderedFactor)
-    new_columns = Dict([col => Vector{Int64}(table_input[col]) for col in
-                                                                   columns[order_factor_ix]]...)
-    table_input = (; table_input..., new_columns...)
+    new_columns = Dict([col => MMI.int(table_input[col]) for col in
+                                                             columns[order_factor_ix]]...)
+    keep_columns = [i for i in columns if all(i .!= keys(new_columns))]
+    table_input = (; table_input[keep_columns]..., new_columns...)
 
     cat_features = get_dtype_feature_ix(table_input, Multiclass) .- 1 # convert to 0 based indexing
     text_features = get_dtype_feature_ix(table_input, MMI.Textual) .- 1 # convert to 0 based indexing
