@@ -46,6 +46,11 @@ function get_dtype_feature_ix(X, dtype)
     return findall(MMI.schema(X).scitypes .<: dtype)
 end
 
+function drop_cols(a::NamedTuple{an}, cols::Tuple) where {an}
+    names = Base.diff_names(an, cols)
+    NamedTuple{names}(a)
+end
+
 """
 Get cat features for model
 get_cat_features
@@ -54,11 +59,10 @@ function prepare_input(X)
     table_input = Tables.columntable(X)
     columns = Tables.columnnames(table_input)
 
-    order_factor_ix = get_dtype_feature_ix(table_input, OrderedFactor)
-    new_columns = Dict([col => MMI.int(table_input[col]) for col in
-                                                             columns[order_factor_ix]]...)
+    order_factor_cols = columns[get_dtype_feature_ix(table_input, OrderedFactor)]
+    new_columns = Dict([col => MMI.int(table_input[col]) for col in order_factor_cols]...)
     keep_columns = [i for i in columns if all(i .!= keys(new_columns))]
-    table_input = (; table_input[keep_columns]..., new_columns...)
+    table_input = (; drop_cols(table_input, order_factor_cols)..., new_columns...)
 
     cat_features = get_dtype_feature_ix(table_input, Multiclass) .- 1 # convert to 0 based indexing
     text_features = get_dtype_feature_ix(table_input, MMI.Textual) .- 1 # convert to 0 based indexing
