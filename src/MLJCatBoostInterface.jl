@@ -48,7 +48,7 @@ end
 
 function drop_cols(a::NamedTuple{an}, cols::Tuple) where {an}
     names = Base.diff_names(an, cols)
-    NamedTuple{names}(a)
+    return NamedTuple{names}(a)
 end
 
 """
