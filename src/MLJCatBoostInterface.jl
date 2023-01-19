@@ -60,7 +60,8 @@ function prepare_input(X)
     columns = Tables.columnnames(table_input)
 
     order_factor_cols = columns[get_dtype_feature_ix(table_input, OrderedFactor)]
-    new_columns = Dict([col => MMI.int(table_input[col]) for col in order_factor_cols]...)
+    new_columns = NamedTuple{order_factor_cols}([MMI.int(table_input[col])
+                                                 for col in order_factor_cols])
     table_input = (; drop_cols(table_input, order_factor_cols)..., new_columns...)
 
     cat_features = get_dtype_feature_ix(table_input, Multiclass) .- 1 # convert to 0 based indexing
@@ -74,9 +75,13 @@ include("mlj_catboostregressor.jl")
 
 const CatBoostModels = Union{CatBoostClassifier,CatBoostRegressor}
 
-function MMI.selectrows(::CatBoostModels, I, X, y)
+function MMI.selectrows(::CatBoostModels, I, X, y, cat_features, text_features)
     py_I = numpy.array(numpy.array(I))
-    return py_X.iloc[py_I,], y[py_I]
+    return X.iloc[py_I,], y[py_I], cat_features, text_features
+end
+
+function MMI.selectrows(::CatBoostModels, I::Colon, X, y, cat_features, text_features)
+    return X, y, cat_features, text_features
 end
 
 function MMI.update(mlj_model::CatBoostModels, verbosity::Integer, fitresult, cache, X, y)
