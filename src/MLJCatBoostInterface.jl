@@ -1,7 +1,8 @@
 
 module MLJCatBoostInterface
 
-using ..CatBoost: catboost, numpy, to_pandas, feature_importances, predict, predict_proba
+using ..CatBoost: catboost, numpy, to_pandas, feature_importances, predict, predict_proba,
+                  Pool
 using PythonCall
 using Tables
 
@@ -51,10 +52,22 @@ function drop_cols(a::NamedTuple{an}, cols::Tuple) where {an}
     return NamedTuple{names}(a)
 end
 
-"""
-Get cat features for model
-get_cat_features
-"""
+function prepare_input(X, y)
+    table_input = Tables.columntable(X)
+    columns = Tables.columnnames(table_input)
+
+    order_factor_cols = columns[get_dtype_feature_ix(table_input, OrderedFactor)]
+    new_columns = NamedTuple{order_factor_cols}([MMI.int(table_input[col])
+                                                 for col in order_factor_cols])
+    table_input = (; drop_cols(table_input, order_factor_cols)..., new_columns...)
+
+    cat_features = get_dtype_feature_ix(table_input, Multiclass) .- 1 # convert to 0 based indexing
+    text_features = get_dtype_feature_ix(table_input, MMI.Textual) .- 1 # convert to 0 based indexing
+    data_pool = Pool(table_input; label=numpy.array(Array(y)), cat_features, text_features)
+
+    return (data_pool,)
+end
+
 function prepare_input(X)
     table_input = Tables.columntable(X)
     columns = Tables.columnnames(table_input)
@@ -67,7 +80,9 @@ function prepare_input(X)
     cat_features = get_dtype_feature_ix(table_input, Multiclass) .- 1 # convert to 0 based indexing
     text_features = get_dtype_feature_ix(table_input, MMI.Textual) .- 1 # convert to 0 based indexing
 
-    return table_input, cat_features, text_features
+    X_pool = Pool(table_input; cat_features, text_features)
+
+    return (X_pool,)
 end
 
 include("mlj_catboostclassifier.jl")
@@ -75,25 +90,39 @@ include("mlj_catboostregressor.jl")
 
 const CatBoostModels = Union{CatBoostClassifier,CatBoostRegressor}
 
-function MMI.selectrows(::CatBoostModels, I, X, y, cat_features, text_features)
+function MMI.reformat(::CatBoostModels, X, y)
+    data_pool = prepare_input(X, y)
+    return (data_pool,)
+end
+
+function MMI.reformat(::CatBoostModels, X)
+    x_pool = prepare_input(X)
+    return (x_pool,)
+end
+
+function MMI.selectrows(::CatBoostModels, I, data_pool)
     py_I = numpy.array(numpy.array(I))
-    return X.iloc[py_I,], y[py_I], cat_features, text_features
+    return (data_pool.slice(py_I))
 end
 
-function MMI.selectrows(::CatBoostModels, I::Colon, X, y, cat_features, text_features)
-    return X, y, cat_features, text_features
+function MMI.selectrows(::CatBoostModels, I::Colon, data_pool)
+    py_I = numpy.array(numpy.array(I))
+    return (data_pool,)
 end
 
-function MMI.update(mlj_model::CatBoostModels, verbosity::Integer, fitresult, cache, X, y)
-    current_iterations = pyconvert(Int, mach.fitresult.tree_count_)
+function MMI.update(mlj_model::CatBoostModels, verbosity::Integer, fitresult, cache,
+                    data_pool)
+    current_iterations = pyconvert(Int, fitresult.tree_count_)
     if current_iterations < mlj_model.iterations
         iterations = mlj_model.iterations - current_iterations
-        fitresult.fit(X, y; init_model=fitresult, iterations=iterations)
+        new_model = model_init(mlj_model; verbose, iterations)
+        new_model.fit(data_pool; init_model=fitresult)
+        report = (feature_importances=feature_importances(new_model),)
     else
-        fitresult, cache, report = fit(mlj_model, verbosity, X, y)
+        new_model, cache, report = fit(mlj_model, verbosity, data_pool)
     end
-    report = (feature_importances=feature_importances(fitresult),)
 
+    cache = fitresult # old model
     return fitresult, cache, report
 end
 

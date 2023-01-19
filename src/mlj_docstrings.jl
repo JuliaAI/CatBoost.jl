@@ -15,10 +15,13 @@ where
 
 - `X`: any table of input features (eg, a `DataFrame`) whose columns
   each have one of the following element scitypes: `Continuous`,
-  `Count`; check column scitypes with `schema(X)`
+  `Count`, `Finite`, `Textual`; check column scitypes with `schema(X)`.
+  `Textual` columns will be passed to catboost as `text_features`,
+  `Multiclass` columns will be passed to catboost as `cat_features`, and
+  `OrderedFactor` columns will be converted to integers.
 
 - `y`: the target, which can be any `AbstractVector` whose element
-  scitype is `Continuous`; check the scitype with `scitype(y)`
+  scitype is `Finite`; check the scitype with `scitype(y)`
 
 Train the machine with `fit!(mach, rows=...)`.
 
@@ -85,7 +88,10 @@ where
 
 - `X`: any table of input features (eg, a `DataFrame`) whose columns
   each have one of the following element scitypes: `Continuous`,
-  `Count`; check column scitypes with `schema(X)`
+  `Count`, `Finite`, `Textual`; check column scitypes with `schema(X)`.
+  `Textual` columns will be passed to catboost as `text_features`,
+  `Multiclass` columns will be passed to catboost as `cat_features`, and
+  `OrderedFactor` columns will be converted to integers.
 
 - `y`: the target, which can be any `AbstractVector` whose element
   scitype is `Continuous`; check the scitype with `scitype(y)`

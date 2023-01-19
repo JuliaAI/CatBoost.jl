@@ -105,19 +105,11 @@ function model_init(mlj_model::CatBoostClassifier; kw...)
     return catboost.CatBoostClassifier(; mlj_to_kwargs(mlj_model)..., kw...)
 end
 
-function MMI.reformat(::CatBoostClassifier, X, y)
-    X_preprocessed, cat_features, text_features = prepare_input(X)
-    py_X = to_pandas(X_preprocessed)
-    py_y = numpy.array(Array(y))
-    return py_X, py_y, cat_features, text_features
-end
-
-function MMI.fit(mlj_model::CatBoostClassifier, verbosity::Int, X, y, cat_features,
-                 text_features)
+function MMI.fit(mlj_model::CatBoostClassifier, verbosity::Int, data_pool)
     verbose = verbosity > 0 ? false : true
 
-    model = model_init(mlj_model; cat_features, text_features, verbose)
-    model.fit(X, y)
+    model = model_init(mlj_model; verbose)
+    model.fit(data_pool)
 
     cache = nothing
     report = (feature_importances=feature_importances(model),)
@@ -128,17 +120,15 @@ end
 MMI.fitted_params(::CatBoostClassifier, model) = (model=model,)
 MMI.reports_feature_importances(::Type{<:CatBoostClassifier}) = true
 
-function MMI.predict(mlj_model::CatBoostClassifier, model, Xnew)
-    X_preprocessed, _, _ = prepare_input(Xnew)
-    py_preds = predict_proba(model, to_pandas(X_preprocessed))
+function MMI.predict(mlj_model::CatBoostClassifier, model, X_pool)
+    py_preds = predict_proba(model, X_pool)
     classes = pyconvert(Array, model.classes_.tolist())
     preds = MMI.UnivariateFinite(classes, pyconvert(Array, py_preds); pool=missing)
     return preds
 end
 
-function MMI.predict_mode(mlj_model::CatBoostClassifier, model, Xnew)
-    X_preprocessed, _, _ = prepare_input(Xnew)
-    py_preds = predict(model, to_pandas(X_preprocessed))
+function MMI.predict_mode(mlj_model::CatBoostClassifier, model, X_pool)
+    py_preds = predict(model, X_pool)
     preds = pyconvert(Array, py_preds)
     return preds
 end
