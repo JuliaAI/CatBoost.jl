@@ -65,7 +65,7 @@ function prepare_input(X, y)
     text_features = get_dtype_feature_ix(table_input, MMI.Textual) .- 1 # convert to 0 based indexing
     data_pool = Pool(table_input; label=numpy.array(Array(y)), cat_features, text_features)
 
-    return (data_pool,)
+    return data_pool
 end
 
 function prepare_input(X)
@@ -82,7 +82,7 @@ function prepare_input(X)
 
     X_pool = Pool(table_input; cat_features, text_features)
 
-    return (X_pool,)
+    return X_pool
 end
 
 include("mlj_catboostclassifier.jl")
