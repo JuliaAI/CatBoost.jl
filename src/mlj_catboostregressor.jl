@@ -112,17 +112,21 @@ function model_init(mlj_model::CatBoostRegressor; kw...)
     return catboost.CatBoostRegressor(; mlj_to_kwargs(mlj_model)..., kw...)
 end
 
-function MMI.fit(mlj_model::CatBoostRegressor, verbosity::Int, X, y)
-    verbose = verbosity > 0 ? false : true
-
+function MMI.reformat(::CatBoostRegressor, X, y)
     X_preprocessed, cat_features, text_features = prepare_input(X)
     py_X = to_pandas(X_preprocessed)
-    py_y = numpy.array(y)
+    py_y = numpy.array(Array(y))
+    return py_X, py_y, cat_features, text_features
+end
+
+function MMI.fit(mlj_model::CatBoostRegressor, verbosity::Int, X, y, cat_features,
+                 text_features)
+    verbose = verbosity > 0 ? false : true
 
     model = model_init(mlj_model; cat_features, text_features, verbose)
-    model.fit(py_X, py_y)
+    model.fit(X, y)
 
-    cache = nothing
+    cache = mlj_model
     report = (feature_importances=feature_importances(model),)
 
     return (model, cache, report)

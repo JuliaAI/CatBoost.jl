@@ -40,12 +40,12 @@ function _booster(persistent)
     return booster
 end
 
-function MMI.save(::CATBOOST_MODELS, fr; kw...)
+function MMI.save(::CatBoostModels, fr; kw...)
     (booster, a_target_element) = fr
     return (_persistent(booster), a_target_element)
 end
 
-function MMI.restore(::CATBOOST_MODELS, fr)
+function MMI.restore(::CatBoostModels, fr)
     (persistent, a_target_element) = fr
     return (_booster(persistent), a_target_element)
 end

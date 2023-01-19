@@ -72,12 +72,30 @@ end
 include("mlj_catboostclassifier.jl")
 include("mlj_catboostregressor.jl")
 
-const CATBOOST_MODELS = Union{CatBoostClassifier,CatBoostRegressor}
+const CatBoostModels = Union{CatBoostClassifier,CatBoostRegressor}
+
+function MMI.selectrows(::CatBoostModels, I, X, y)
+    py_I = numpy.array(numpy.array(I))
+    return py_X.iloc[py_I,], y[py_I]
+end
+
+function MMI.update(mlj_model::CatBoostModels, verbosity::Integer, fitresult, cache, X, y)
+    current_iterations = pyconvert(Int, mach.fitresult.tree_count_)
+    if current_iterations < mlj_model.iterations
+        iterations = mlj_model.iterations - current_iterations
+        fitresult.fit(X, y; init_model=fitresult, iterations=iterations)
+    else
+        fitresult, cache, report = fit(mlj_model, verbosity, X, y)
+    end
+    report = (feature_importances=feature_importances(fitresult),)
+
+    return fitresult, cache, report
+end
 
 include("mlj_serialization.jl")
 include("mlj_docstrings.jl")
 
-function MMI.feature_importances(m::CATBOOST_MODELS, fitresult, report)
+function MMI.feature_importances(m::CatBoostModels, fitresult, report)
     return report.feature_importances
 end
 
