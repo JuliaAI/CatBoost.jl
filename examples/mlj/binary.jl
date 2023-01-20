@@ -15,7 +15,7 @@ eval_data = DataFrame([coerce(["a", "a"], Multiclass), coerce(["b", "d"], Multic
                        coerce([0, 0], OrderedFactor), [4, 4], [6, 50], [8, 60]], :auto)
 
 # Initialize CatBoostClassifier
-model = CatBoostClassifier(; iterations=2, learning_rate=1, depth=2)
+model = CatBoostClassifier(; iterations=2, learning_rate=1.0, depth=2)
 mach = machine(model, train_data, train_labels)
 
 # Fit model
