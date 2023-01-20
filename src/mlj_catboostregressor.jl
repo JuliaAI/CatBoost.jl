@@ -78,7 +78,7 @@ function MMI.fit(mlj_model::CatBoostRegressor, verbosity::Int, data_pool)
     model = model_init(mlj_model; verbose)
     model.fit(data_pool)
 
-    cache = mlj_model
+    cache = (; mlj_model=deepcopy(mlj_model))
     report = (feature_importances=feature_importances(model),)
 
     return (model, cache, report)
