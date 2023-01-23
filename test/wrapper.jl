@@ -9,6 +9,16 @@
         @test tbl2 == tbl
     end
 
+    @testset "feature_importance" begin
+        train_data = PyList([[1, 4, 5, 6], [4, 5, 6, 7], [30, 40, 50, 60]])
+        train_labels = PyList([10, 20, 30])
+        model = catboost.CatBoostRegressor(; iterations=2, learning_rate=1, depth=2,
+                                           verbose=false)
+        CatBoost.fit!(model, train_data, train_labels)
+        feat_importance = CatBoost.feature_importance(model)
+        @test size(feat_importance, 1) == 4
+    end
+
     @testset "Python Wrapper Examples" begin
         for ex in readdir(WRAPPER_EXAMPLES_DIR)
             @testset "$ex" begin

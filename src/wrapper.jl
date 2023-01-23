@@ -3,17 +3,6 @@
 ##### Data
 #####
 
-"""
-    Pool(data; label=nothing, cat_features=nothing, text_features=nothing,
-         pairs=nothing, delimiter='\t', has_header=false, weight=nothing,
-         group_id = nothing, group_weight=nothing, subgroup_id=nothing,
-         pairs_weight=nothing, baseline=nothing, features_names=nothing,
-         thread_count = -1) -> Py
-
-Creates a `Pool` object holding training data and labels. `data` may also be passed
-as a keyword argument.
-
-"""
 function Pool(data; kwargs...)
     return catboost.Pool(to_catboost(data);
                          (k => to_catboost(v) for (k, v) in pairs(kwargs))...)
@@ -94,15 +83,19 @@ end
 #####
 
 """
-    feature_importances(py_model)
+    feature_importance(py_model)
 
-Generate a dataframe of feature importances
+Generate a Vector{Pair{Symbol, Float64}} of feature importances
 """
-function feature_importances(py_model)
+function feature_importance(py_model)
     py_df_importance = pandas.DataFrame()
     py_df_importance["name"] = py_model.feature_names_
     py_df_importance["importance"] = py_model.feature_importances_
-    return pandas_to_tbl(py_df_importance)
+    tbl_importance = pandas_to_tbl(py_df_importance)
+    n_features = size(tbl_importance.name, 1)
+    feat_importance = [Symbol(tbl_importance.name[i]) => tbl_importance.importance[i] for i in
+                                                                                          1:n_features]
+    return feat_importance
 end
 
 #####

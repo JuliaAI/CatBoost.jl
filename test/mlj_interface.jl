@@ -12,7 +12,7 @@
     end
 
     @testset "CatBoostClassifier" begin
-        X = DataFrame(; a=[1, 4, 5, 6], b=[4, 5, 6, 7])
+        X = (; a=[1, 4, 5, 6], b=[4, 5, 6, 7])
         y = coerce([0, 0, 1, 1], OrderedFactor)
 
         # MLJ Interface
@@ -27,7 +27,7 @@
     end
 
     @testset "CatBoostRegressor" begin
-        X = DataFrame(; a=[1, 4, 5, 6], b=[4, 5, 6, 7])
+        X = (; a=[1, 4, 5, 6], b=[4, 5, 6, 7])
         y = [2.0, 4.0, 6.0, 7.0]
 
         # MLJ Interface

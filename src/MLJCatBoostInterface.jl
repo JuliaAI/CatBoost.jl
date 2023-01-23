@@ -1,7 +1,7 @@
 
 module MLJCatBoostInterface
 
-using ..CatBoost: catboost, numpy, to_pandas, feature_importances, predict, predict_proba,
+using ..CatBoost: catboost, numpy, to_pandas, feature_importance, predict, predict_proba,
                   Pool
 using PythonCall
 using Tables
@@ -117,7 +117,7 @@ function MMI.update(mlj_model::CatBoostModels, verbosity::Integer, fitresult, ca
         iterations = mlj_model.iterations - cache.mlj_model.iterations
         new_model = model_init(mlj_model; verbose, iterations)
         new_model.fit(data_pool; init_model=fitresult)
-        report = (feature_importances=feature_importances(new_model),)
+        report = (feature_importances=feature_importance(new_model),)
         cache = (; mlj_model=mlj_model)
     else
         new_model, cache, report = fit(mlj_model, verbosity, data_pool)
@@ -130,7 +130,7 @@ include("mlj_serialization.jl")
 include("mlj_docstrings.jl")
 
 function MMI.feature_importances(m::CatBoostModels, fitresult, report)
-    return report.feature_importances
+    return feature_importance(fitresult)
 end
 
 MMI.metadata_pkg.((CatBoostClassifier, CatBoostRegressor), name="CatBoost.jl",

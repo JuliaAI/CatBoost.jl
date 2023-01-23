@@ -3,7 +3,7 @@ const CATBOOST_DOCS_LINK = "https://catboost.ai/en/docs/"
 const CATBOOST_PARAMS_DOCS_LINK = "https://catboost.ai/en/docs/references/training-parameters/"
 
 """
-$(MMI.doc_header(CatBoostRegressor))
+$(MMI.doc_header(CatBoostClassifier))
 
 # Training data
 
@@ -27,16 +27,14 @@ Train the machine with `fit!(mach, rows=...)`.
 
 
 # Hyper-parameters
-#TODO: Document hyper-parameters
-https://catboost.ai/en/docs/concepts/python-reference_catboostclassifier#parameters
+
+More details on the catboost hyperparameters, here are the Python docs: https://catboost.ai/en/docs/concepts/python-reference_catboostclassifier#parameters
+
 
 # Operations
 
-- `predict(mach, Xnew)`: return predictions of the target given new
+- `predict(mach, Xnew)`: probabilistic predictions of the target given new
   features `Xnew` having the same scitype as `X` above.
-
-- `predict_mode(mach, Xnew)`: return predicted probabilities of the 
-  target given new features `Xnew` having the same scitype as `X` above.
 
 # Fitted parameters
 
@@ -47,24 +45,27 @@ The fields of `fitted_params(mach)` are:
 
 # Report
 
-- `feature_importances`: DataFrame of feature importances
+- `feature_importances`: Vector{Pair{Symbol, Float64}} of feature importances
 
 
 # Examples
 
 ```
-using CatBoost
-using DataFrames
-using MLJBase
+using CatBoost.MLJCatBoostInterface
+using MLJ
 
-X = DataFrame(; a=[1, 4, 5, 6], b=[4, 5, 6, 7])
-y = [0, 0, 1, 1]
+X = (
+    duration = [1.5, 4.1, 5.0, 6.7], 
+    n_phone_calls = [4, 5, 6, 7], 
+    department = coerce(["acc", "ops", "acc", "ops"], Multiclass), 
+)
+y = coerce([0, 0, 1, 1], Multiclass)
 
-model = CatBoost.CatBoostClassifier(iterations=5)
+model = CatBoostClassifier(iterations=5)
 mach = machine(model, X, y)
-MLJBase.fit!(mach)
-probs = MLJBase.predict(mach, X)
-preds = MLJBase.predict_mode(mach, X)
+fit!(mach)
+probs = predict(mach, X)
+preds = predict_mode(mach, X)
 ```
 
 See also
@@ -100,8 +101,9 @@ Train the machine with `fit!(mach, rows=...)`.
 
 
 # Hyper-parameters
-#TODO: Document hyper-parameters
-https://catboost.ai/en/docs/concepts/python-reference_catboostregressor#parameters
+
+More details on the catboost hyperparameters, here are the Python docs: https://catboost.ai/en/docs/concepts/python-reference_catboostclassifier#parameters
+
 
 # Operations
 
@@ -118,23 +120,26 @@ The fields of `fitted_params(mach)` are:
 
 # Report
 
-- `feature_importances`: DataFrame of feature importances
+- `feature_importances`: Vector{Pair{Symbol, Float64}} of feature importances
 
 
 # Examples
 
 ```
-using CatBoost
-using DataFrames
-using MLJBase
+using CatBoost.MLJCatBoostInterface
+using MLJ
 
-X = DataFrame(; a=[1, 4, 5, 6], b=[4, 5, 6, 7])
+X = (
+    duration = [1.5, 4.1, 5.0, 6.7], 
+    n_phone_calls = [4, 5, 6, 7], 
+    department = coerce(["acc", "ops", "acc", "ops"], Multiclass), 
+)
 y = [2.0, 4.0, 6.0, 7.0]
 
 model = CatBoostRegressor(iterations=5)
 mach = machine(model, X, y)
-MLJBase.fit!(mach)
-preds = MLJBase.predict(mach, X)
+fit!(mach)
+preds = predict(mach, X)
 ```
 
 See also
