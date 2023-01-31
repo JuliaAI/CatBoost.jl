@@ -101,12 +101,11 @@ function MMI.reformat(::CatBoostModels, X)
 end
 
 function MMI.selectrows(::CatBoostModels, I, data_pool)
-    py_I = numpy.array(numpy.array(I))
+    py_I = numpy.array(numpy.array(I .- 1))
     return (data_pool.slice(py_I),)
 end
 
 function MMI.selectrows(::CatBoostModels, I::Colon, data_pool)
-    py_I = numpy.array(numpy.array(I))
     return (data_pool,)
 end
 
