@@ -52,6 +52,11 @@ function drop_cols(a::NamedTuple{an}, cols::Tuple) where {an}
     return NamedTuple{names}(a)
 end
 
+
+#####
+##### Convert data to CatBoost pools
+#####
+
 function prepare_input(X, y)
     table_input = Tables.columntable(X)
     columns = Tables.columnnames(table_input)
@@ -85,29 +90,55 @@ function prepare_input(X)
     return X_pool
 end
 
+#####
+##### CatBoost Models
+#####
+
 include("mlj_catboostclassifier.jl")
 include("mlj_catboostregressor.jl")
 
 const CatBoostModels = Union{CatBoostClassifier,CatBoostRegressor}
 
-function MMI.reformat(::CatBoostModels, X, y)
+#####
+##### Reformat data for MLJ
+#####
+
+function MMI.reformat(::CatBoostRegressor, X, y)
     data_pool = prepare_input(X, y)
     return (data_pool,)
 end
 
-function MMI.reformat(::CatBoostModels, X)
-    x_pool = prepare_input(X)
-    return (x_pool,)
+function MMI.reformat(::CatBoostClassifier, X, y)
+    data_pool = prepare_input(X, y)
+    return (data_pool, first(y))
 end
 
-function MMI.selectrows(::CatBoostModels, I, data_pool)
+function MMI.reformat(::CatBoostModels, X)
+    X_pool = prepare_input(X)
+    return (X_pool,)
+end
+
+function MMI.selectrows(::CatBoostRegressor, I, data_pool)
     py_I = numpy.array(numpy.array(I .- 1))
     return (data_pool.slice(py_I),)
 end
 
-function MMI.selectrows(::CatBoostModels, I::Colon, data_pool)
+function MMI.selectrows(::CatBoostRegressor, I::Colon, data_pool)
     return (data_pool,)
 end
+
+function MMI.selectrows(::CatBoostClassifier, I, data_pool, y_first)
+    py_I = numpy.array(numpy.array(I .- 1))
+    return (data_pool.slice(py_I), y_first)
+end
+
+function MMI.selectrows(::CatBoostClassifier, I::Colon, data_pool, y_first)
+    return (data_pool, y_first)
+end
+
+#####
+##### Additional MLJ functionality 
+#####
 
 function MMI.update(mlj_model::CatBoostModels, verbosity::Integer, fitresult, cache,
                     data_pool)
@@ -126,6 +157,10 @@ function MMI.update(mlj_model::CatBoostModels, verbosity::Integer, fitresult, ca
 end
 
 include("mlj_serialization.jl")
+
+#####
+##### MLJ docstring, metadata
+#####
 include("mlj_docstrings.jl")
 
 function MMI.feature_importances(m::CatBoostModels, fitresult, report)
