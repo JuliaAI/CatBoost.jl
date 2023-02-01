@@ -73,7 +73,7 @@ function model_init(mlj_model::CatBoostClassifier; kw...)
 end
 
 function MMI.fit(mlj_model::CatBoostClassifier, verbosity::Int, data_pool)
-    verbose = verbosity > 0 ? false : true
+    verbose = verbosity <= 1 ? false : true
 
     model = model_init(mlj_model; verbose)
     model.fit(data_pool)
