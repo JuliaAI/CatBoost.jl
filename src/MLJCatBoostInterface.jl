@@ -52,7 +52,6 @@ function drop_cols(a::NamedTuple{an}, cols::Tuple) where {an}
     return NamedTuple{names}(a)
 end
 
-
 #####
 ##### Convert data to CatBoost pools
 #####
