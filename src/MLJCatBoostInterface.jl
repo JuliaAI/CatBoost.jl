@@ -160,7 +160,6 @@ include("mlj_serialization.jl")
 #####
 ##### MLJ docstring, metadata
 #####
-include("mlj_docstrings.jl")
 
 function MMI.feature_importances(m::CatBoostModels, fitresult, report)
     return feature_importance(fitresult)
@@ -186,6 +185,8 @@ MMI.metadata_model(CatBoostRegressor;
                    target_scitype=AbstractVector{<:MMI.Continuous},
                    human_name="CatBoost regressor",
                    load_path="$PKG.MLJCatBoostInterface.CatBoostRegressor")
+
+include("mlj_docstrings.jl")
 
 export CatBoostClassifier, CatBoostRegressor
 

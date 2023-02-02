@@ -25,16 +25,22 @@ where
 
 Train the machine with `fit!(mach, rows=...)`.
 
-
 # Hyper-parameters
 
-More details on the catboost hyperparameters, here are the Python docs: https://catboost.ai/en/docs/concepts/python-reference_catboostclassifier#parameters
-
+More details on the catboost hyperparameters, here are the Python docs: 
+https://catboost.ai/en/docs/concepts/python-reference_catboostclassifier#parameters
 
 # Operations
 
 - `predict(mach, Xnew)`: probabilistic predictions of the target given new
   features `Xnew` having the same scitype as `X` above.
+
+- `predict_mode(mach, Xnew)`: returns the mode of each of the prediction above.
+
+# Accessor functions
+
+- `feature_importances(mach)`: return vector of feature importances, in the form of  
+  `feature::Symbol => importance::Real` pairs
 
 # Fitted parameters
 
@@ -42,11 +48,10 @@ The fields of `fitted_params(mach)` are:
 
 - `model`: The Python CatBoostClassifier model
 
-
 # Report
 
+The fields of `report(mach)` are:
 - `feature_importances`: Vector{Pair{Symbol, Float64}} of feature importances
-
 
 # Examples
 
@@ -99,17 +104,20 @@ where
 
 Train the machine with `fit!(mach, rows=...)`.
 
-
 # Hyper-parameters
 
-More details on the catboost hyperparameters, here are the Python docs: https://catboost.ai/en/docs/concepts/python-reference_catboostclassifier#parameters
-
+More details on the catboost hyperparameters, here are the Python docs: 
+https://catboost.ai/en/docs/concepts/python-reference_catboostclassifier#parameters
 
 # Operations
 
-- `predict(mach, Xnew)`: return predictions of the target given new
+- `predict(mach, Xnew)`: probabilistic predictions of the target given new
   features `Xnew` having the same scitype as `X` above.
 
+# Accessor functions
+
+- `feature_importances(mach)`: return vector of feature importances, in the form of  
+  `feature::Symbol => importance::Real` pairs
 
 # Fitted parameters
 
@@ -117,11 +125,10 @@ The fields of `fitted_params(mach)` are:
 
 - `model`: The Python CatBoostRegressor model
 
-
 # Report
 
+The fields of `report(mach)` are:
 - `feature_importances`: Vector{Pair{Symbol, Float64}} of feature importances
-
 
 # Examples
 
