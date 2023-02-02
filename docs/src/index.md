@@ -1,13 +1,17 @@
-# API Documentation
+# CatBoost.jl
 
-Below is the API documentation for CatBoost.jl.
+Julia interface to [CatBoost](https://catboost.ai/). This library is a wrapper CatBoost's Python package via [PythonCall.jl](https://github.com/cjdoris/PythonCall.jl). 
 
 For a nice introduction to the package, see the [examples](https://github.com/beacon-biosignals/CatBoost.jl/blob/main/examples/).
 
-```@meta
-CurrentModule = CatBoost
+# Installation
+
+This package is available in the Julia General Registry. You can install it with either of the following commands:
+
+```
+pkg> add CatBoost
 ```
 
-```@autodocs
-Modules = [CatBoost]
+```julia
+julia> using Pkg; Pkg.add("CatBoost")
 ```
