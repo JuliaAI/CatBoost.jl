@@ -155,6 +155,8 @@ function MMI.update(mlj_model::CatBoostModels, verbosity::Integer, fitresult, ca
     return new_model, cache, report
 end
 
+MMI.iteration_parameter(::Type{<:CatBoostModels}) = :iterations
+
 include("mlj_serialization.jl")
 
 #####
