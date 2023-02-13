@@ -4,7 +4,7 @@
 
 [build-img]: https://github.com/JuliaAI/CatBoost.jl/workflows/CI/badge.svg
 [build-url]: https://github.com/JuliaAI/CatBoost.jl/actions
-[codecov-img]: https://codecov.io/gh/JuliaAI/CatBoost.jl/branch/main/graph/badge.svg?token=e4RFBNkB9a
+[codecov-img]: https://codecov.io/gh/JuliaAI/CatBoost.jl/branch/main/graph/badge.svg
 [codecov-url]: https://codecov.io/github/JuliaAI/CatBoost.jl
 
 
