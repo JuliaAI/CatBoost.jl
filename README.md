@@ -1,11 +1,11 @@
 # CatBoost.jl
 
-[![Build Status][build-img]][build-url] [![CodeCov][codecov-img]][codecov-url] [![](https://img.shields.io/badge/docs-dev-blue.svg)](https://beacon-biosignals.github.io/CatBoost.jl/dev)
+[![Build Status][build-img]][build-url] [![CodeCov][codecov-img]][codecov-url] [![](https://img.shields.io/badge/docs-dev-blue.svg)](https://JuliaAI.github.io/CatBoost.jl/dev)
 
-[build-img]: https://github.com/beacon-biosignals/CatBoost.jl/workflows/CI/badge.svg
-[build-url]: https://github.com/beacon-biosignals/CatBoost.jl/actions
-[codecov-img]: https://codecov.io/gh/beacon-biosignals/CatBoost.jl/branch/main/graph/badge.svg?token=e4RFBNkB9a
-[codecov-url]: https://codecov.io/github/beacon-biosignals/CatBoost.jl
+[build-img]: https://github.com/JuliaAI/CatBoost.jl/workflows/CI/badge.svg
+[build-url]: https://github.com/JuliaAI/CatBoost.jl/actions
+[codecov-img]: https://codecov.io/gh/JuliaAI/CatBoost.jl/branch/main/graph/badge.svg?token=e4RFBNkB9a
+[codecov-url]: https://codecov.io/github/JuliaAI/CatBoost.jl
 
 
 Julia interface to [CatBoost](https://catboost.ai/).
