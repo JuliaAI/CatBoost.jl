@@ -50,7 +50,13 @@
         end
         @testset "CatBoostClassifier" begin
             for data in [MLJTestInterface.make_binary(), MLJTestInterface.make_multiclass()]
-                failures, summary = MLJTestInterface.test([CatBoostClassifier], data...;
+                X = data[1]
+                y = data[2]
+                # catboost fails if only 1 class is present when training
+                # MLJTestInterface splits the data down the middle, so the binary
+                # data only has one class during training
+                y[1] = y[end]
+                failures, summary = MLJTestInterface.test([CatBoostClassifier], X, y;
                                                           mod=@__MODULE__, verbosity=0, # bump to debug
                                                           throw=false)
                 @test isempty(failures)
