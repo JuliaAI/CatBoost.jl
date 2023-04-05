@@ -167,7 +167,7 @@ function MMI.feature_importances(m::CatBoostModels, fitresult, report)
     return feature_importance(fitresult)
 end
 
-MMI.metadata_pkg.((CatBoostClassifier, CatBoostRegressor), name="CatBoost.jl",
+MMI.metadata_pkg.((CatBoostClassifier, CatBoostRegressor), name="CatBoost",
                   package_uuid="e2e10f9a-a85d-4fa9-b6b2-639a32100a12",
                   package_url="https://github.com/JuliaAI/CatBoost.jl", is_pure_julia=false,
                   package_license="MIT")
