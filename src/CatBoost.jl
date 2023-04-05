@@ -39,11 +39,11 @@ function __init__()
     cv
 
     @doc """
-    Pool(data; label=nothing, cat_features=nothing, text_features=nothing,
-            pairs=nothing, delimiter='\t', has_header=false, weight=nothing,
-            group_id = nothing, group_weight=nothing, subgroup_id=nothing,
-            pairs_weight=nothing, baseline=nothing, features_names=nothing,
-            thread_count = -1) -> Py
+        Pool(data; label=nothing, cat_features=nothing, text_features=nothing,
+                pairs=nothing, delimiter='\t', has_header=false, weight=nothing,
+                group_id = nothing, group_weight=nothing, subgroup_id=nothing,
+                pairs_weight=nothing, baseline=nothing, features_names=nothing,
+                thread_count = -1) -> Py
 
     Creates a `Pool` object holding training data and labels. `data` may also be passed
     as a keyword argument.
@@ -55,6 +55,32 @@ function __init__()
     $(@doc catboost.Pool)
     """
     Pool
+
+    @doc """
+        CatBoostClassifier(args...; kwargs...) -> Py
+
+    Creates a `CatBoostClassifier` object.
+
+    ---
+
+    ## Python documentation for `catboost.CatBoostClassifier`
+
+    $(@doc catboost.CatBoostClassifier)
+    """
+    CatBoostClassifier
+
+    @doc """
+        CatBoostRegressor(args...; kwargs...) -> Py
+
+    Creates a `CatBoostRegressor` object.
+
+    ---
+
+    ## Python documentation for `catboost.CatBoostRegressor`
+
+    $(@doc catboost.CatBoostRegressor)
+    """
+    CatBoostRegressor
 
     return nothing
 end
