@@ -39,9 +39,9 @@ cv(pool::Py; kwargs...) = pandas_to_tbl(catboost.cv(pool; kwargs...))
 #####
 
 """
-    to_catboost(arg)
+    CatBoost.to_catboost(arg)
 
-`to_catboost` is called on each argument passed to [`fit`](@ref), [`predict`](@ref), [`predict_proba`](@ref), and [`cv`](@ref)
+`CatBoost.to_catboost` is called on each argument passed to [`fit`](@ref), [`predict`](@ref), [`predict_proba`](@ref), and [`cv`](@ref)
 to allow customization of the conversion of Julia types to python types. 
 
 By default, `to_catboost` simply checks if the argument satisfies `Tables.istable(arg)`, and if so, it outputs
@@ -55,7 +55,7 @@ to_catboost(arg) = Tables.istable(arg) ? to_pandas(arg) : arg
 all_to_catboost(args) = (to_catboost(arg) for arg in args)
 
 """
-    to_pandas(X)
+    CatBoost.to_pandas(X)
 
 Convert a table/array to a pandas dataframe
 """
@@ -83,11 +83,11 @@ end
 #####
 
 """
-    feature_importance(py_model)
+    CatBoost.feature_importance(py_model::Py)
 
 Generate a Vector{Pair{Symbol, Float64}} of feature importances
 """
-function feature_importance(py_model)
+function feature_importance(py_model::Py)
     py_df_importance = pandas.DataFrame()
     py_df_importance["name"] = py_model.feature_names_
     py_df_importance["importance"] = py_model.feature_importances_
