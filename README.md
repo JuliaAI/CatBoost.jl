@@ -68,4 +68,4 @@ using CondaPkg
 CondaPkg.add("catboost"; version="=1.1")
 ```
 
-This will create a `CondaPkg.toml` file in your current envrionment with the restricted `catboost` version. More details about managing conda environments with `CondaPkg.jl` can be found [here](https://github.com/cjdoris/CondaPkg.jl).
+This will create a `CondaPkg.toml` file in your current envrionment with the restricted `catboost` version. For more information on managing Conda environments with `CondaPkg.jl`, refer to the [official documentation](https://github.com/cjdoris/CondaPkg.jl).
