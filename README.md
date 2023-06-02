@@ -58,3 +58,14 @@ preds = predict(model, eval_data)
 
 end # module
 ```
+
+# Restricting Python catboost version
+
+By default, `CatBoost.jl` installs the latest compatible version of `catboost` (version `>=1.1`) in your current `CondaPkg.jl` environment. To install a specific version, create a `CondaPkg.toml` file using `CondaPkg.jl`. Below is an example for specifying `catboost` version `v1.1`:
+
+```julia
+using CondaPkg
+CondaPkg.add("catboost"; version="=1.1")
+```
+
+This will create a `CondaPkg.toml` file in your current envrionment with the restricted `catboost` version. For more information on managing Conda environments with `CondaPkg.jl`, refer to the [official documentation](https://github.com/cjdoris/CondaPkg.jl).
