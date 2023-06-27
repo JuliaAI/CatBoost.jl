@@ -7,9 +7,9 @@ Pool
 CatBoost.CatBoostClassifier
 CatBoost.CatBoostRegressor
 cv
-to_catboost
-to_pandas
+CatBoost.to_catboost
+CatBoost.to_pandas
 pandas_to_tbl
-feature_importance
+CatBoost.feature_importance
 load_dataset
 ```
