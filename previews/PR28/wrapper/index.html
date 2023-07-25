@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>Wrapper · CatBoost.jl</title><link href="https://fonts.googleapis.com/css?family=Lato|Roboto+Mono" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.0/css/fontawesome.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.0/css/solid.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.0/css/brands.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.11.1/katex.min.css" rel="stylesheet" type="text/css"/><script>documenterBaseURL=".."</script><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" data-main="../assets/documenter.js"></script><script src="../siteinfo.js"></script><script src="../../versions.js"></script><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../assets/themes/documenter-dark.css" data-theme-name="documenter-dark" data-theme-primary-dark/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../assets/themes/documenter-light.css" data-theme-name="documenter-light" data-theme-primary/><script src="../assets/themeswap.js"></script></head><body><div id="documenter"><nav class="docs-sidebar"><div class="docs-package-name"><span class="docs-autofit">CatBoost.jl</span></div><form class="docs-search" action="../search/"><input class="docs-search-query" id="documenter-search-query" name="q" type="text" placeholder="Search docs"/></form><ul class="docs-menu"><li><a class="tocitem" href="../">Introduction</a></li><li class="is-active"><a class="tocitem" href>Wrapper</a></li><li><a class="tocitem" href="../mlj_api/">MLJ API</a></li></ul><div class="docs-version-selector field has-addons"><div class="control"><span class="docs-label button is-static is-size-7">Version</span></div><div class="docs-selector control is-expanded"><div class="select is-fullwidth is-size-7"><select id="documenter-version-selector"></select></div></div></div></nav><div class="docs-main"><header class="docs-navbar"><nav class="breadcrumb"><ul class="is-hidden-mobile"><li class="is-active"><a href>Wrapper</a></li></ul><ul class="is-hidden-tablet"><li class="is-active"><a href>Wrapper</a></li></ul></nav><div class="docs-right"><a class="docs-edit-link" href="https://github.com/JuliaAI/CatBoost.jl/blob/master/docs/src/wrapper.md" title="Edit on GitHub"><span class="docs-icon fab"></span><span class="docs-label is-hidden-touch">Edit on GitHub</span></a><a class="docs-settings-button fas fa-cog" id="documenter-settings-button" href="#" title="Settings"></a><a class="docs-sidebar-button fa fa-bars is-hidden-desktop" id="documenter-sidebar-button" href="#"></a></div></header><article class="content" id="documenter-page"><h1 id="Python-Wrapper"><a class="docs-heading-anchor" href="#Python-Wrapper">Python Wrapper</a><a id="Python-Wrapper-1"></a><a class="docs-heading-anchor-permalink" href="#Python-Wrapper" title="Permalink"></a></h1><p>Below is the Python wrapper documentation for CatBoost.jl.</p><article class="docstring"><header><a class="docstring-binding" id="CatBoost.Pool" href="#CatBoost.Pool"><code>CatBoost.Pool</code></a> — <span class="docstring-category">Function</span></header><section><div><pre><code class="language-julia">Pool(data; label=nothing, cat_features=nothing, text_features=nothing,
+        pairs=nothing, delimiter=&#39;	&#39;, has_header=false, weight=nothing,
+        group_id = nothing, group_weight=nothing, subgroup_id=nothing,
+        pairs_weight=nothing, baseline=nothing, features_names=nothing,
+        thread_count = -1) -&gt; Py</code></pre><p>Creates a <code>Pool</code> object holding training data and labels. <code>data</code> may also be passed as a keyword argument.</p><hr/><p><strong>Python documentation for <code>catboost.Pool</code></strong></p><p>Python class <code>Pool</code>.</p><pre><code class="language-text">Pool used in CatBoost as a data structure to train model from.</code></pre></div><a class="docs-sourcelink" target="_blank" href="https://github.com/JuliaAI/CatBoost.jl/blob/20a31ed505a4a53c2b9c078310e659ad0af0cff4/src/CatBoost.jl#L41-L56">source</a></section></article><article class="docstring"><header><a class="docstring-binding" id="CatBoost.CatBoostClassifier" href="#CatBoost.CatBoostClassifier"><code>CatBoost.CatBoostClassifier</code></a> — <span class="docstring-category">Function</span></header><section><div><pre><code class="language-julia">CatBoostClassifier(args...; kwargs...) -&gt; Py</code></pre><p>Creates a <code>CatBoostClassifier</code> object.</p><hr/><p><strong>Python documentation for <code>catboost.CatBoostClassifier</code></strong></p><p>Python class <code>CatBoostClassifier</code>.</p><pre><code class="language-text">Implementation of the scikit-learn API for CatBoost classification.
+
+Parameters
+----------
+iterations : int, [default=500]
+    Max count of trees.
+    range: [1,+inf]
+learning_rate : float, [default value is selected automatically for binary classification with other parameters set to default. In all other cases default is 0.03]
+    Step size shrinkage used in update to prevents overfitting.
+    range: (0,1]
+depth : int, [default=6]
+    Depth of a tree. All trees are the same depth.
+    range: [1,+inf]
+l2_leaf_reg : float, [default=3.0]
+    Coefficient at the L2 regularization term of the cost function.
+    range: [0,+inf]
+model_size_reg : float, [default=None]
+    Model size regularization coefficient.
+    range: [0,+inf]
+rsm : float, [default=None]
+    Subsample ratio of columns when constructing each tree.
+    range: (0,1]
+loss_function : string or object, [default=&#39;Logloss&#39;]
+    The metric to use in training and also selector of the machine learning
+    problem to solve. If string, then the name of a supported metric,
+    optionally suffixed with parameter description.
+    If object, it shall provide methods &#39;calc_ders_range&#39; or &#39;calc_ders_multi&#39;.
+border_count : int, [default = 254 for training on CPU or 128 for training on GPU]
+    The number of partitions in numeric features binarization. Used in the preliminary calculation.
+    range: [1,65535] on CPU, [1,255] on GPU
+feature_border_type : string, [default=&#39;GreedyLogSum&#39;]
+    The binarization mode in numeric features binarization. Used in the preliminary calculation.
+    Possible values:
+        - &#39;Median&#39;
+        - &#39;Uniform&#39;
+        - &#39;UniformAndQuantiles&#39;
+        - &#39;GreedyLogSum&#39;
+        - &#39;MaxLogSum&#39;
+        - &#39;MinEntropy&#39;
+per_float_feature_quantization : list of strings, [default=None]
+    List of float binarization descriptions.
+    Format : described in documentation on catboost.ai
+    Example 1: [&#39;0:1024&#39;] means that feature 0 will have 1024 borders.
+    Example 2: [&#39;0:border_count=1024&#39;, &#39;1:border_count=1024&#39;, ...] means that two first features have 1024 borders.
+    Example 3: [&#39;0:nan_mode=Forbidden,border_count=32,border_type=GreedyLogSum&#39;,
+                &#39;1:nan_mode=Forbidden,border_count=32,border_type=GreedyLogSum&#39;] - defines more quantization properties for first two features.
+input_borders : string or pathlib.Path, [default=None]
+    input file with borders used in numeric features binarization.
+output_borders : string, [default=None]
+    output file for borders that were used in numeric features binarization.
+fold_permutation_block : int, [default=1]
+    To accelerate the learning.
+    The recommended value is within [1, 256]. On small samples, must be set to 1.
+    range: [1,+inf]
+od_pval : float, [default=None]
+    Use overfitting detector to stop training when reaching a specified threshold.
+    Can be used only with eval_set.
+    range: [0,1]
+od_wait : int, [default=None]
+    Number of iterations which overfitting detector will wait after new best error.
+od_type : string, [default=None]
+    Type of overfitting detector which will be used in program.
+    Posible values:
+        - &#39;IncToDec&#39;
+        - &#39;Iter&#39;
+    For &#39;Iter&#39; type od_pval must not be set.
+    If None, then od_type=IncToDec.
+nan_mode : string, [default=None]
+    Way to process missing values for numeric features.
+    Possible values:
+        - &#39;Forbidden&#39; - raises an exception if there is a missing value for a numeric feature in a dataset.
+        - &#39;Min&#39; - each missing value will be processed as the minimum numerical value.
+        - &#39;Max&#39; - each missing value will be processed as the maximum numerical value.
+    If None, then nan_mode=Min.
+counter_calc_method : string, [default=None]
+    The method used to calculate counters for dataset with Counter type.
+    Possible values:
+        - &#39;PrefixTest&#39; - only objects up to current in the test dataset are considered
+        - &#39;FullTest&#39; - all objects are considered in the test dataset
+        - &#39;SkipTest&#39; - Objects from test dataset are not considered
+        - &#39;Full&#39; - all objects are considered for both learn and test dataset
+    If None, then counter_calc_method=PrefixTest.
+leaf_estimation_iterations : int, [default=None]
+    The number of steps in the gradient when calculating the values in the leaves.
+    If None, then leaf_estimation_iterations=1.
+    range: [1,+inf]
+leaf_estimation_method : string, [default=None]
+    The method used to calculate the values in the leaves.
+    Possible values:
+        - &#39;Newton&#39;
+        - &#39;Gradient&#39;
+thread_count : int, [default=None]
+    Number of parallel threads used to run CatBoost.
+    If None or -1, then the number of threads is set to the number of CPU cores.
+    range: [1,+inf]
+random_seed : int, [default=None]
+    Random number seed.
+    If None, 0 is used.
+    range: [0,+inf]
+use_best_model : bool, [default=None]
+    To limit the number of trees in predict() using information about the optimal value of the error function.
+    Can be used only with eval_set.
+best_model_min_trees : int, [default=None]
+    The minimal number of trees the best model should have.
+verbose: bool
+    When set to True, logging_level is set to &#39;Verbose&#39;.
+    When set to False, logging_level is set to &#39;Silent&#39;.
+silent: bool, synonym for verbose
+logging_level : string, [default=&#39;Verbose&#39;]
+    Possible values:
+        - &#39;Silent&#39;
+        - &#39;Verbose&#39;
+        - &#39;Info&#39;
+        - &#39;Debug&#39;
+metric_period : int, [default=1]
+    The frequency of iterations to print the information to stdout. The value should be a positive integer.
+simple_ctr: list of strings, [default=None]
+    Binarization settings for categorical features.
+        Format : see documentation
+        Example: [&#39;Borders:CtrBorderCount=5:Prior=0:Prior=0.5&#39;, &#39;BinarizedTargetMeanValue:TargetBorderCount=10:TargetBorderType=MinEntropy&#39;, ...]
+        CTR types:
+            CPU and GPU
+            - &#39;Borders&#39;
+            - &#39;Buckets&#39;
+            CPU only
+            - &#39;BinarizedTargetMeanValue&#39;
+            - &#39;Counter&#39;
+            GPU only
+            - &#39;FloatTargetMeanValue&#39;
+            - &#39;FeatureFreq&#39;
+        Number_of_borders, binarization type, target borders and binarizations, priors are optional parametrs
+combinations_ctr: list of strings, [default=None]
+per_feature_ctr: list of strings, [default=None]
+ctr_target_border_count: int, [default=None]
+    Maximum number of borders used in target binarization for categorical features that need it.
+    If TargetBorderCount is specified in &#39;simple_ctr&#39;, &#39;combinations_ctr&#39; or &#39;per_feature_ctr&#39; option it
+    overrides this value.
+    range: [1, 255]
+ctr_leaf_count_limit : int, [default=None]
+    The maximum number of leaves with categorical features.
+    If the number of leaves exceeds the specified limit, some leaves are discarded.
+    The leaves to be discarded are selected as follows:
+        - The leaves are sorted by the frequency of the values.
+        - The top N leaves are selected, where N is the value specified in the parameter.
+        - All leaves starting from N+1 are discarded.
+    This option reduces the resulting model size
+    and the amount of memory required for training.
+    Note that the resulting quality of the model can be affected.
+    range: [1,+inf] (for zero limit use ignored_features)
+store_all_simple_ctr : bool, [default=None]
+    Ignore categorical features, which are not used in feature combinations,
+    when choosing candidates for exclusion.
+    Use this parameter with ctr_leaf_count_limit only.
+max_ctr_complexity : int, [default=4]
+    The maximum number of Categ features that can be combined.
+    range: [0,+inf]
+has_time : bool, [default=False]
+    To use the order in which objects are represented in the input data
+    (do not perform a random permutation of the dataset at the preprocessing stage).
+allow_const_label : bool, [default=False]
+    To allow the constant label value in dataset.
+target_border: float, [default=None]
+    Border for target binarization.
+classes_count : int, [default=None]
+    The upper limit for the numeric class label.
+    Defines the number of classes for multiclassification.
+    Only non-negative integers can be specified.
+    The given integer should be greater than any of the target values.
+    If this parameter is specified the labels for all classes in the input dataset
+    should be smaller than the given value.
+    If several of &#39;classes_count&#39;, &#39;class_weights&#39;, &#39;class_names&#39; parameters are defined
+    the numbers of classes specified by each of them must be equal.
+class_weights : list or dict, [default=None]
+    Classes weights. The values are used as multipliers for the object weights.
+    If None, all classes are supposed to have weight one.
+    If list - class weights in order of class_names or sequential classes if class_names is undefined
+    If dict - dict of class_name -&gt; class_weight.
+    If several of &#39;classes_count&#39;, &#39;class_weights&#39;, &#39;class_names&#39; parameters are defined
+    the numbers of classes specified by each of them must be equal.
+auto_class_weights : string [default=None]
+    Enables automatic class weights calculation. Possible values:
+        - Balanced  # weight = maxSummaryClassWeight / summaryClassWeight, statistics determined from train pool
+        - SqrtBalanced  # weight = sqrt(maxSummaryClassWeight / summaryClassWeight)
+class_names: list of strings, [default=None]
+    Class names. Allows to redefine the default values for class labels (integer numbers).
+    If several of &#39;classes_count&#39;, &#39;class_weights&#39;, &#39;class_names&#39; parameters are defined
+    the numbers of classes specified by each of them must be equal.
+one_hot_max_size : int, [default=None]
+    Convert the feature to float
+    if the number of different values that it takes exceeds the specified value.
+    Ctrs are not calculated for such features.
+random_strength : float, [default=1]
+    Score standard deviation multiplier.
+name : string, [default=&#39;experiment&#39;]
+    The name that should be displayed in the visualization tools.
+ignored_features : list, [default=None]
+    Indices or names of features that should be excluded when training.
+train_dir : string or pathlib.Path, [default=None]
+    The directory in which you want to record generated in the process of learning files.
+custom_metric : string or list of strings, [default=None]
+    To use your own metric function.
+custom_loss: alias to custom_metric
+eval_metric : string or object, [default=None]
+    To optimize your custom metric in loss.
+bagging_temperature : float, [default=None]
+    Controls intensity of Bayesian bagging. The higher the temperature the more aggressive bagging is.
+    Typical values are in range [0, 1] (0 - no bagging, 1 - default).
+save_snapshot : bool, [default=None]
+    Enable progress snapshotting for restoring progress after crashes or interruptions
+snapshot_file : string or pathlib.Path, [default=None]
+    Learn progress snapshot file path, if None will use default filename
+snapshot_interval: int, [default=600]
+    Interval between saving snapshots (seconds)
+fold_len_multiplier : float, [default=None]
+    Fold length multiplier. Should be greater than 1
+used_ram_limit : string or number, [default=None]
+    Set a limit on memory consumption (value like &#39;1.2gb&#39; or 1.2e9).
+    WARNING: Currently this option affects CTR memory usage only.
+gpu_ram_part : float, [default=0.95]
+    Fraction of the GPU RAM to use for training, a value from (0, 1].
+pinned_memory_size: int [default=None]
+    Size of additional CPU pinned memory used for GPU learning,
+    usually is estimated automatically, thus usually should not be set.
+allow_writing_files : bool, [default=True]
+    If this flag is set to False, no files with different diagnostic info will be created during training.
+    With this flag no snapshotting can be done. Plus visualisation will not
+    work, because visualisation uses files that are created and updated during training.
+final_ctr_computation_mode : string, [default=&#39;Default&#39;]
+    Possible values:
+        - &#39;Default&#39; - Compute final ctrs for all pools.
+        - &#39;Skip&#39; - Skip final ctr computation. WARNING: model without ctrs can&#39;t be applied.
+approx_on_full_history : bool, [default=False]
+    If this flag is set to True, each approximated value is calculated using all the preceeding rows in the fold (slower, more accurate).
+    If this flag is set to False, each approximated value is calculated using only the beginning 1/fold_len_multiplier fraction of the fold (faster, slightly less accurate).
+boosting_type : string, default value depends on object count and feature count in train dataset and on learning mode.
+    Boosting scheme.
+    Possible values:
+        - &#39;Ordered&#39; - Gives better quality, but may slow down the training.
+        - &#39;Plain&#39; - The classic gradient boosting scheme. May result in quality degradation, but does not slow down the training.
+task_type : string, [default=None]
+    The calcer type used to train the model.
+    Possible values:
+        - &#39;CPU&#39;
+        - &#39;GPU&#39;
+device_config : string, [default=None], deprecated, use devices instead
+devices : list or string, [default=None], GPU devices to use.
+    String format is: &#39;0&#39; for 1 device or &#39;0:1:3&#39; for multiple devices or &#39;0-3&#39; for range of devices.
+    List format is : [0] for 1 device or [0,1,3] for multiple devices.
+
+bootstrap_type : string, Bayesian, Bernoulli, Poisson, MVS.
+    Default bootstrap is Bayesian for GPU and MVS for CPU.
+    Poisson bootstrap is supported only on GPU.
+    MVS bootstrap is supported only on CPU.
+
+subsample : float, [default=None]
+    Sample rate for bagging. This parameter can be used Poisson or Bernoully bootstrap types.
+
+mvs_reg : float, [default is set automatically at each iteration based on gradient distribution]
+    Regularization parameter for MVS sampling algorithm
+
+monotone_constraints : list or numpy.ndarray or string or dict, [default=None]
+    Monotone constraints for features.
+
+feature_weights : list or numpy.ndarray or string or dict, [default=None]
+    Coefficient to multiply split gain with specific feature use. Should be non-negative.
+
+penalties_coefficient : float, [default=1]
+    Common coefficient for all penalties. Should be non-negative.
+
+first_feature_use_penalties : list or numpy.ndarray or string or dict, [default=None]
+    Penalties to first use of specific feature in model. Should be non-negative.
+
+per_object_feature_penalties : list or numpy.ndarray or string or dict, [default=None]
+    Penalties for first use of feature for each object. Should be non-negative.
+
+sampling_frequency : string, [default=PerTree]
+    Frequency to sample weights and objects when building trees.
+    Possible values:
+        - &#39;PerTree&#39; - Before constructing each new tree
+        - &#39;PerTreeLevel&#39; - Before choosing each new split of a tree
+
+sampling_unit : string, [default=&#39;Object&#39;].
+    Possible values:
+        - &#39;Object&#39;
+        - &#39;Group&#39;
+    The parameter allows to specify the sampling scheme:
+    sample weights for each object individually or for an entire group of objects together.
+
+dev_score_calc_obj_block_size: int, [default=5000000]
+    CPU only. Size of block of samples in score calculation. Should be &gt; 0
+    Used only for learning speed tuning.
+    Changing this parameter can affect results due to numerical accuracy differences
+
+dev_efb_max_buckets : int, [default=1024]
+    CPU only. Maximum bucket count in exclusive features bundle. Should be in an integer between 0 and 65536.
+    Used only for learning speed tuning.
+
+sparse_features_conflict_fraction : float, [default=0.0]
+    CPU only. Maximum allowed fraction of conflicting non-default values for features in exclusive features bundle.
+    Should be a real value in [0, 1) interval.
+
+grow_policy : string, [SymmetricTree,Lossguide,Depthwise], [default=SymmetricTree]
+    The tree growing policy. It describes how to perform greedy tree construction.
+
+min_data_in_leaf : int, [default=1].
+    The minimum training samples count in leaf.
+    CatBoost will not search for new splits in leaves with samples count less than min_data_in_leaf.
+    This parameter is used only for Depthwise and Lossguide growing policies.
+
+max_leaves : int, [default=31],
+    The maximum leaf count in resulting tree.
+    This parameter is used only for Lossguide growing policy.
+
+score_function : string, possible values L2, Cosine, NewtonL2, NewtonCosine, [default=Cosine]
+    For growing policy Lossguide default=NewtonL2.
+    GPU only. Score that is used during tree construction to select the next tree split.
+
+max_depth : int, Synonym for depth.
+
+n_estimators : int, synonym for iterations.
+
+num_trees : int, synonym for iterations.
+
+num_boost_round : int, synonym for iterations.
+
+colsample_bylevel : float, synonym for rsm.
+
+random_state : int, synonym for random_seed.
+
+reg_lambda : float, synonym for l2_leaf_reg.
+
+objective : string, synonym for loss_function.
+
+num_leaves : int, synonym for max_leaves.
+
+min_child_samples : int, synonym for min_data_in_leaf
+
+eta : float, synonym for learning_rate.
+
+max_bin : float, synonym for border_count.
+
+scale_pos_weight : float, synonym for class_weights.
+    Can be used only for binary classification. Sets weight multiplier for
+    class 1 to scale_pos_weight value.
+
+metadata : dict, string to string key-value pairs to be stored in model metadata storage
+
+early_stopping_rounds : int
+    Synonym for od_wait. Only one of these parameters should be set.
+
+cat_features : list or numpy.ndarray, [default=None]
+    If not None, giving the list of Categ features indices or names (names are represented as strings).
+    If it contains feature names, feature names must be defined for the training dataset passed to &#39;fit&#39;.
+
+text_features : list or numpy.ndarray, [default=None]
+    If not None, giving the list of Text features indices or names (names are represented as strings).
+    If it contains feature names, feature names must be defined for the training dataset passed to &#39;fit&#39;.
+
+embedding_features : list or numpy.ndarray, [default=None]
+    If not None, giving the list of Embedding features indices or names (names are represented as strings).
+    If it contains feature names, feature names must be defined for the training dataset passed to &#39;fit&#39;.
+
+leaf_estimation_backtracking : string, [default=None]
+    Type of backtracking during gradient descent.
+    Possible values:
+        - &#39;No&#39; - never backtrack; supported on CPU and GPU
+        - &#39;AnyImprovement&#39; - reduce the descent step until the value of loss function is less than before the step; supported on CPU and GPU
+        - &#39;Armijo&#39; - reduce the descent step until Armijo condition is satisfied; supported on GPU only
+
+model_shrink_rate : float, [default=0]
+    This parameter enables shrinkage of model at the start of each iteration. CPU only.
+    For Constant mode shrinkage coefficient is calculated as (1 - model_shrink_rate * learning_rate).
+    For Decreasing mode shrinkage coefficient is calculated as (1 - model_shrink_rate / iteration).
+    Shrinkage coefficient should be in [0, 1).
+
+model_shrink_mode : string, [default=None]
+    Mode of shrinkage coefficient calculation. CPU only.
+    Possible values:
+        - &#39;Constant&#39; - Shrinkage coefficient is constant at each iteration.
+        - &#39;Decreasing&#39; - Shrinkage coefficient decreases at each iteration.
+
+langevin : bool, [default=False]
+    Enables the Stochastic Gradient Langevin Boosting. CPU only.
+
+diffusion_temperature : float, [default=0]
+    Langevin boosting diffusion temperature. CPU only.
+
+posterior_sampling : bool, [default=False]
+    Set group of parameters for further use Uncertainty prediction:
+        - Langevin = True
+        - Model Shrink Rate = 1/(2N), where N is dataset size
+        - Model Shrink Mode = Constant
+        - Diffusion-temperature = N, where N is dataset size. CPU only.
+
+boost_from_average : bool, [default=True for RMSE, False for other losses]
+    Enables to initialize approx values by best constant value for specified loss function.
+    Available for RMSE, Logloss, CrossEntropy, Quantile and MAE.
+
+tokenizers : list of dicts,
+    Each dict is a tokenizer description. Example:
+    ```
+    [
+        {
+            &#39;tokenizer_id&#39;: &#39;Tokenizer&#39;,  # Tokeinzer identifier.
+            &#39;lowercasing&#39;: &#39;false&#39;,  # Possible values: &#39;true&#39;, &#39;false&#39;.
+            &#39;number_process_policy&#39;: &#39;LeaveAsIs&#39;,  # Possible values: &#39;Skip&#39;, &#39;LeaveAsIs&#39;, &#39;Replace&#39;.
+            &#39;number_token&#39;: &#39;%&#39;,  # Rarely used character. Used in conjunction with Replace NumberProcessPolicy.
+            &#39;separator_type&#39;: &#39;ByDelimiter&#39;,  # Possible values: &#39;ByDelimiter&#39;, &#39;BySense&#39;.
+            &#39;delimiter&#39;: &#39; &#39;,  # Used in conjunction with ByDelimiter SeparatorType.
+            &#39;split_by_set&#39;: &#39;false&#39;,  # Each single character in delimiter used as individual delimiter.
+            &#39;skip_empty&#39;: &#39;true&#39;,  # Possible values: &#39;true&#39;, &#39;false&#39;.
+            &#39;token_types&#39;: [&#39;Word&#39;, &#39;Number&#39;, &#39;Unknown&#39;],  # Used in conjunction with BySense SeparatorType.
+                # Possible values: &#39;Word&#39;, &#39;Number&#39;, &#39;Punctuation&#39;, &#39;SentenceBreak&#39;, &#39;ParagraphBreak&#39;, &#39;Unknown&#39;.
+            &#39;subtokens_policy&#39;: &#39;SingleToken&#39;,  # Possible values:
+                # &#39;SingleToken&#39; - All subtokens are interpreted as single token).
+                # &#39;SeveralTokens&#39; - All subtokens are interpreted as several token.
+        },
+        ...
+    ]
+    ```
+
+dictionaries : list of dicts,
+    Each dict is a tokenizer description. Example:
+    ```
+    [
+        {
+            &#39;dictionary_id&#39;: &#39;Dictionary&#39;,  # Dictionary identifier.
+            &#39;token_level_type&#39;: &#39;Word&#39;,  # Possible values: &#39;Word&#39;, &#39;Letter&#39;.
+            &#39;gram_order&#39;: &#39;1&#39;,  # 1 for Unigram, 2 for Bigram, ...
+            &#39;skip_step&#39;: &#39;0&#39;,  # 1 for 1-skip-gram, ...
+            &#39;end_of_word_token_policy&#39;: &#39;Insert&#39;,  # Possible values: &#39;Insert&#39;, &#39;Skip&#39;.
+            &#39;end_of_sentence_token_policy&#39;: &#39;Skip&#39;,  # Possible values: &#39;Insert&#39;, &#39;Skip&#39;.
+            &#39;occurrence_lower_bound&#39;: &#39;3&#39;,  # The lower bound of token occurrences in the text to include it in the dictionary.
+            &#39;max_dictionary_size&#39;: &#39;50000&#39;,  # The max dictionary size.
+        },
+        ...
+    ]
+    ```
+
+feature_calcers : list of strings,
+    Each string is a calcer description. Example:
+    ```
+    [
+        &#39;NaiveBayes&#39;,
+        &#39;BM25&#39;,
+        &#39;BoW:top_tokens_count=2000&#39;,
+    ]
+    ```
+
+text_processing : dict,
+    Text processging description.
+
+eval_fraction : float, [default=None]
+    Fraction of the train dataset to be used as the evaluation dataset.</code></pre></div><a class="docs-sourcelink" target="_blank" href="https://github.com/JuliaAI/CatBoost.jl/blob/20a31ed505a4a53c2b9c078310e659ad0af0cff4/src/CatBoost.jl#L59-L69">source</a></section></article><article class="docstring"><header><a class="docstring-binding" id="CatBoost.CatBoostRegressor" href="#CatBoost.CatBoostRegressor"><code>CatBoost.CatBoostRegressor</code></a> — <span class="docstring-category">Function</span></header><section><div><pre><code class="language-julia">CatBoostRegressor(args...; kwargs...) -&gt; Py</code></pre><p>Creates a <code>CatBoostRegressor</code> object.</p><hr/><p><strong>Python documentation for <code>catboost.CatBoostRegressor</code></strong></p><p>Python class <code>CatBoostRegressor</code>.</p><pre><code class="language-text">Implementation of the scikit-learn API for CatBoost regression.
+
+Parameters
+----------
+Like in CatBoostClassifier, except loss_function, classes_count, class_names and class_weights
+
+loss_function : string, [default=&#39;RMSE&#39;]
+    &#39;RMSE&#39;
+    &#39;MAE&#39;
+    &#39;Quantile:alpha=value&#39;
+    &#39;LogLinQuantile:alpha=value&#39;
+    &#39;Poisson&#39;
+    &#39;MAPE&#39;
+    &#39;Lq:q=value&#39;
+    &#39;SurvivalAft:dist=value;scale=value&#39;</code></pre></div><a class="docs-sourcelink" target="_blank" href="https://github.com/JuliaAI/CatBoost.jl/blob/20a31ed505a4a53c2b9c078310e659ad0af0cff4/src/CatBoost.jl#L72-L82">source</a></section></article><article class="docstring"><header><a class="docstring-binding" id="CatBoost.cv" href="#CatBoost.cv"><code>CatBoost.cv</code></a> — <span class="docstring-category">Function</span></header><section><div><pre><code class="language-julia">cv(pool::Py; kwargs...) -&gt; Table</code></pre><p>Accepts a <a href="#CatBoost.Pool"><code>CatBoost.Pool</code></a> positional argument to specify the training data, and keyword arguments to configure the settings. See the python documentation below for what keyword arguments are accepted.</p><hr/><p><strong>Python documentation for <code>catboost.cv</code></strong></p><p>Python function <code>cv</code>.</p><pre><code class="language-text">Cross-validate the CatBoost model.
+
+Parameters
+----------
+pool : catboost.Pool
+    Data to cross-validate on.
+
+params : dict
+    Parameters for CatBoost.
+    CatBoost has many of parameters, all have default values.
+    If  None, all params still defaults.
+    If  dict, overriding some (or all) params.
+
+dtrain : catboost.Pool or tuple (X, y)
+    Synonym for pool parameter. Only one of these parameters should be set.
+
+iterations : int
+    Number of boosting iterations. Can be set in params dict.
+
+num_boost_round : int
+    Synonym for iterations. Only one of these parameters should be set.
+
+fold_count : int, optional (default=3)
+    The number of folds to split the dataset into.
+
+nfold : int
+    Synonym for fold_count.
+
+type : string, optional (default=&#39;Classical&#39;)
+    Type of cross-validation
+    Possible values:
+        - &#39;Classical&#39;
+        - &#39;Inverted&#39;
+        - &#39;TimeSeries&#39;
+
+inverted : bool, optional (default=False)
+    Train on the test fold and evaluate the model on the training folds.
+
+partition_random_seed : int, optional (default=0)
+    Use this as the seed value for random permutation of the data.
+    Permutation is performed before splitting the data for cross validation.
+    Each seed generates unique data splits.
+
+seed : int, optional
+    Synonym for partition_random_seed. This parameter is deprecated. Use
+    partition_random_seed instead.
+    If both parameters are initialised partition_random_seed parameter is
+    ignored.
+
+shuffle : bool, optional (default=True)
+    Shuffle the dataset objects before splitting into folds.
+
+logging_level : string, optional (default=None)
+    Possible values:
+        - &#39;Silent&#39;
+        - &#39;Verbose&#39;
+        - &#39;Info&#39;
+        - &#39;Debug&#39;
+
+stratified : bool, optional (default=None)
+    Perform stratified sampling. True for classification and False otherwise.
+
+as_pandas : bool, optional (default=True)
+    Return pd.DataFrame when pandas is installed.
+    If False or pandas is not installed, return dict.
+
+metric_period : int, [default=1]
+    The frequency of iterations to print the information to stdout. The value should be a positive integer.
+
+verbose : bool or int
+    If verbose is bool, then if set to True, logging_level is set to Verbose,
+    if set to False, logging_level is set to Silent.
+    If verbose is int, it determines the frequency of writing metrics to output and
+    logging_level is set to Verbose.
+
+verbose_eval : bool or int
+    Synonym for verbose. Only one of these parameters should be set.
+
+plot : bool, optional (default=False)
+    If True, draw train and eval error in Jupyter notebook
+
+plot_file : file-like or str, optional (default=None)
+    If not None, save train and eval error graphs to file
+
+early_stopping_rounds : int
+    Activates Iter overfitting detector with od_wait set to early_stopping_rounds.
+
+save_snapshot : bool, [default=None]
+    Enable progress snapshotting for restoring progress after crashes or interruptions
+
+snapshot_file : string or pathlib.Path, [default=None]
+    Learn progress snapshot file path, if None will use default filename
+
+snapshot_interval: int, [default=600]
+    Interval between saving snapshots (seconds)
+
+metric_update_interval: float, [default=0.5]
+    Interval between updating metrics (seconds)
+
+folds: generator or iterator of (train_idx, test_idx) tuples, scikit-learn splitter object or None, optional (default=None)
+    If generator or iterator, it should yield the train and test indices for each fold.
+    If object, it should be one of the scikit-learn splitter classes
+    (https://scikit-learn.org/stable/modules/classes.html#splitter-classes)
+    and have ``split`` method.
+    if folds is not None, then all of fold_count, shuffle, partition_random_seed, inverted are None
+
+return_models: bool, optional (default=False)
+    if True, return a list of models fitted for each CV fold
+
+log_cout: output stream or callback for logging
+
+log_cerr: error stream or callback for logging
+
+Returns
+-------
+cv results : pandas.core.frame.DataFrame with cross-validation results
+    columns are: test-error-mean  test-error-std  train-error-mean  train-error-std
+cv models : list of trained models, if return_models=True</code></pre></div><a class="docs-sourcelink" target="_blank" href="https://github.com/JuliaAI/CatBoost.jl/blob/20a31ed505a4a53c2b9c078310e659ad0af0cff4/src/CatBoost.jl#L26-L38">source</a></section></article><article class="docstring"><header><a class="docstring-binding" id="CatBoost.to_catboost" href="#CatBoost.to_catboost"><code>CatBoost.to_catboost</code></a> — <span class="docstring-category">Function</span></header><section><div><pre><code class="language-julia">CatBoost.to_catboost(arg)</code></pre><p><code>CatBoost.to_catboost</code> is called on each argument passed to <a href="@ref"><code>fit</code></a>, <a href="@ref"><code>predict</code></a>, <a href="@ref"><code>predict_proba</code></a>, and <a href="#CatBoost.cv"><code>cv</code></a> to allow customization of the conversion of Julia types to python types. </p><p>By default, <code>to_catboost</code> simply checks if the argument satisfies <code>Tables.istable(arg)</code>, and if so, it outputs a corresponding pandas table, and otherwise passes it on.</p><p>To customize the conversion for custom types, provide a method for this function.</p></div><a class="docs-sourcelink" target="_blank" href="https://github.com/JuliaAI/CatBoost.jl/blob/20a31ed505a4a53c2b9c078310e659ad0af0cff4/src/wrapper.jl#L41-L51">source</a></section></article><article class="docstring"><header><a class="docstring-binding" id="CatBoost.to_pandas" href="#CatBoost.to_pandas"><code>CatBoost.to_pandas</code></a> — <span class="docstring-category">Function</span></header><section><div><pre><code class="language-julia">CatBoost.to_pandas(X)</code></pre><p>Convert a table/array to a pandas dataframe</p></div><a class="docs-sourcelink" target="_blank" href="https://github.com/JuliaAI/CatBoost.jl/blob/20a31ed505a4a53c2b9c078310e659ad0af0cff4/src/wrapper.jl#L57-L61">source</a></section></article><article class="docstring"><header><a class="docstring-binding" id="CatBoost.pandas_to_tbl" href="#CatBoost.pandas_to_tbl"><code>CatBoost.pandas_to_tbl</code></a> — <span class="docstring-category">Function</span></header><section><div><pre><code class="language-julia">pandas_to_tbl(pandas_df::Py)</code></pre><p>Convert a pandas dataframe into a Tables.jl columntable</p></div><a class="docs-sourcelink" target="_blank" href="https://github.com/JuliaAI/CatBoost.jl/blob/20a31ed505a4a53c2b9c078310e659ad0af0cff4/src/wrapper.jl#L71-L75">source</a></section></article><article class="docstring"><header><a class="docstring-binding" id="CatBoost.feature_importance" href="#CatBoost.feature_importance"><code>CatBoost.feature_importance</code></a> — <span class="docstring-category">Function</span></header><section><div><pre><code class="language-julia">CatBoost.feature_importance(py_model::Py)</code></pre><p>Generate a Vector{Pair{Symbol, Float64}} of feature importances</p></div><a class="docs-sourcelink" target="_blank" href="https://github.com/JuliaAI/CatBoost.jl/blob/20a31ed505a4a53c2b9c078310e659ad0af0cff4/src/wrapper.jl#L85-L89">source</a></section></article><article class="docstring"><header><a class="docstring-binding" id="CatBoost.load_dataset" href="#CatBoost.load_dataset"><code>CatBoost.load_dataset</code></a> — <span class="docstring-category">Function</span></header><section><div><pre><code class="language-julia">load_dataset(dataset_name::Symbol)</code></pre><p>Import a catboost dataset</p></div><a class="docs-sourcelink" target="_blank" href="https://github.com/JuliaAI/CatBoost.jl/blob/20a31ed505a4a53c2b9c078310e659ad0af0cff4/src/wrapper.jl#L105-L109">source</a></section></article></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../">« Introduction</a><a class="docs-footer-nextpage" href="../mlj_api/">MLJ API »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> on <span class="colophon-date" title="Tuesday 25 July 2023 13:51">Tuesday 25 July 2023</span>. Using Julia version 1.6.7.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
