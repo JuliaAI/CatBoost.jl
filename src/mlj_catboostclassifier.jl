@@ -74,7 +74,7 @@ end
 
 function MMI.fit(mlj_model::CatBoostClassifier, verbosity::Int, data_pool, y_first)
     # Check if y_first has only one unique value
-    unique_classes = unique(y_first)
+    unique_classes = pyconvert(Vector, numpy.unique(data_pool.get_label()))
     if length(unique_classes) == 1
         # Skip training and store the single class
         fitresult = (model=nothing, single_class=unique_classes[1], y_first=y_first)
@@ -98,7 +98,7 @@ MMI.fitted_params(::CatBoostClassifier, model) = (model=model,)
 MMI.reports_feature_importances(::Type{<:CatBoostClassifier}) = true
 
 function MMI.predict(mlj_model::CatBoostClassifier, fitresult, X_pool)
-    if fitresult.model === nothing
+    if fitresult[1] === nothing
         # Always predict the single class
         n = nrow(X_pool)
         classes = [fitresult.single_class]
@@ -114,7 +114,7 @@ function MMI.predict(mlj_model::CatBoostClassifier, fitresult, X_pool)
 end
 
 function MMI.predict_mode(mlj_model::CatBoostClassifier, fitresult, X_pool)
-    if fitresult.model === nothing
+    if fitresult[1] === nothing
         # Return probability 1 for the single class
         n = nrow(X_pool)
         return hcat(ones(n), zeros(n))
