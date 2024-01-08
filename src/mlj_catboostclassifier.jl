@@ -73,14 +73,22 @@ function model_init(mlj_model::CatBoostClassifier; kw...)
 end
 
 function MMI.fit(mlj_model::CatBoostClassifier, verbosity::Int, data_pool, y_first)
-    verbose = verbosity <= 1 ? false : true
+    # Check if y_first has only one unique value
+    unique_classes = unique(y_first)
+    if length(unique_classes) == 1
+        # Skip training and store the single class
+        fitresult = (model=nothing, single_class=unique_classes[1], y_first=y_first)
+        cache = (; mlj_model=deepcopy(mlj_model))
+        report = (feature_importances=[],) # No feature importances in this case
+        return (fitresult, cache, report)
+    end
 
+    verbose = verbosity <= 1 ? false : true
     model = model_init(mlj_model; verbose)
     model.fit(data_pool)
 
     cache = (; mlj_model=deepcopy(mlj_model))
     report = (feature_importances=feature_importance(model),)
-
     fitresult = (model, y_first)
 
     return (fitresult, cache, report)
@@ -90,6 +98,14 @@ MMI.fitted_params(::CatBoostClassifier, model) = (model=model,)
 MMI.reports_feature_importances(::Type{<:CatBoostClassifier}) = true
 
 function MMI.predict(mlj_model::CatBoostClassifier, fitresult, X_pool)
+    if fitresult.model === nothing
+        # Always predict the single class
+        n = nrow(X_pool)
+        classes = [fitresult.single_class]
+        probs = ones(n, 1)
+        return MMI.UnivariateFinite(classes, probs; pool=fitresult.y_first)
+    end
+
     model, y_first = fitresult
     classes = pyconvert(Array, model.classes_.tolist())
     py_preds = predict_proba(model, X_pool)
@@ -98,6 +114,12 @@ function MMI.predict(mlj_model::CatBoostClassifier, fitresult, X_pool)
 end
 
 function MMI.predict_mode(mlj_model::CatBoostClassifier, fitresult, X_pool)
+    if fitresult.model === nothing
+        # Return probability 1 for the single class
+        n = nrow(X_pool)
+        return hcat(ones(n), zeros(n))
+    end
+
     model, y_first = fitresult
     py_preds = predict(model, X_pool)
     preds = pyconvert(Array, py_preds)
