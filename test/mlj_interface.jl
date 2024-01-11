@@ -49,7 +49,12 @@
             @test isempty(failures)
         end
         @testset "CatBoostClassifier" begin
-            for data in [MLJTestInterface.make_binary(), MLJTestInterface.make_multiclass()]
+            for data in [
+                MLJTestInterface.make_binary(), 
+                MLJTestInterface.make_multiclass(),
+                MLJTestInterface.make_binary(row_table=true), 
+                MLJTestInterface.make_multiclass(row_table=false),
+            ]
                 X = data[1]
                 y = data[2]
                 failures, summary = MLJTestInterface.test([CatBoostClassifier], X, y;

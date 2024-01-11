@@ -11,4 +11,4 @@ const MLJ_EXAMPLES_DIR = joinpath(@__DIR__, "..", "examples/mlj")
 include("wrapper.jl")
 include("mlj_interface.jl")
 
-Aqua.test_all(CatBoost; ambiguities=false)
+Aqua.test_all(CatBoost)
