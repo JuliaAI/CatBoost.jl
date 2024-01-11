@@ -3,25 +3,25 @@
         pairs=nothing, delimiter=&#39;	&#39;, has_header=false, weight=nothing,
         group_id = nothing, group_weight=nothing, subgroup_id=nothing,
         pairs_weight=nothing, baseline=nothing, features_names=nothing,
-        thread_count = -1) -&gt; Py</code></pre><p>Creates a <code>Pool</code> object holding training data and labels. <code>data</code> may also be passed as a keyword argument.</p><hr/><p><strong>Python documentation for <code>catboost.Pool</code></strong></p><p>Python class <code>Pool</code>.</p><pre><code class="language-text">Pool used in CatBoost as a data structure to train model from.</code></pre></div><a class="docs-sourcelink" target="_blank" href="https://github.com/JuliaAI/CatBoost.jl/blob/e7f56b760c6b200a5c5f7ae734480156b87a79cf/src/CatBoost.jl#L41-L56">source</a></section></article><article class="docstring"><header><a class="docstring-binding" id="CatBoost.CatBoostClassifier" href="#CatBoost.CatBoostClassifier"><code>CatBoost.CatBoostClassifier</code></a> — <span class="docstring-category">Function</span></header><section><div><pre><code class="language-julia">CatBoostClassifier(args...; kwargs...) -&gt; Py</code></pre><p>Creates a <code>CatBoostClassifier</code> object.</p><hr/><p><strong>Python documentation for <code>catboost.CatBoostClassifier</code></strong></p><p>Python class <code>CatBoostClassifier</code>.</p><pre><code class="language-text">Implementation of the scikit-learn API for CatBoost classification.
+        thread_count = -1) -&gt; Py</code></pre><p>Creates a <code>Pool</code> object holding training data and labels. <code>data</code> may also be passed as a keyword argument.</p><hr/><p><strong>Python documentation for <code>catboost.Pool</code></strong></p><p>Python class <code>Pool</code>.</p><pre><code class="language-text">Pool used in CatBoost as a data structure to train model from.</code></pre></div><a class="docs-sourcelink" target="_blank" href="https://github.com/JuliaAI/CatBoost.jl/blob/6d6ff0f675c0590b38c7f66a07c273e1bc72f565/src/CatBoost.jl#L41-L56">source</a></section></article><article class="docstring"><header><a class="docstring-binding" id="CatBoost.CatBoostClassifier" href="#CatBoost.CatBoostClassifier"><code>CatBoost.CatBoostClassifier</code></a> — <span class="docstring-category">Function</span></header><section><div><pre><code class="language-julia">CatBoostClassifier(args...; kwargs...) -&gt; Py</code></pre><p>Creates a <code>CatBoostClassifier</code> object.</p><hr/><p><strong>Python documentation for <code>catboost.CatBoostClassifier</code></strong></p><p>Python class <code>CatBoostClassifier</code>.</p><pre><code class="language-text">Implementation of the scikit-learn API for CatBoost classification.
 
 Parameters
 ----------
 iterations : int, [default=500]
     Max count of trees.
-    range: [1,+inf]
+    range: [1,+inf)
 learning_rate : float, [default value is selected automatically for binary classification with other parameters set to default. In all other cases default is 0.03]
     Step size shrinkage used in update to prevents overfitting.
     range: (0,1]
 depth : int, [default=6]
     Depth of a tree. All trees are the same depth.
-    range: [1,+inf]
+    range: [1,16]
 l2_leaf_reg : float, [default=3.0]
     Coefficient at the L2 regularization term of the cost function.
-    range: [0,+inf]
+    range: [0,+inf)
 model_size_reg : float, [default=None]
     Model size regularization coefficient.
-    range: [0,+inf]
+    range: [0,+inf)
 rsm : float, [default=None]
     Subsample ratio of columns when constructing each tree.
     range: (0,1]
@@ -56,7 +56,7 @@ output_borders : string, [default=None]
 fold_permutation_block : int, [default=1]
     To accelerate the learning.
     The recommended value is within [1, 256]. On small samples, must be set to 1.
-    range: [1,+inf]
+    range: [1,+inf)
 od_pval : float, [default=None]
     Use overfitting detector to stop training when reaching a specified threshold.
     Can be used only with eval_set.
@@ -88,7 +88,7 @@ counter_calc_method : string, [default=None]
 leaf_estimation_iterations : int, [default=None]
     The number of steps in the gradient when calculating the values in the leaves.
     If None, then leaf_estimation_iterations=1.
-    range: [1,+inf]
+    range: [1,+inf)
 leaf_estimation_method : string, [default=None]
     The method used to calculate the values in the leaves.
     Possible values:
@@ -97,11 +97,11 @@ leaf_estimation_method : string, [default=None]
 thread_count : int, [default=None]
     Number of parallel threads used to run CatBoost.
     If None or -1, then the number of threads is set to the number of CPU cores.
-    range: [1,+inf]
+    range: [1,+inf)
 random_seed : int, [default=None]
     Random number seed.
     If None, 0 is used.
-    range: [0,+inf]
+    range: [0,+inf)
 use_best_model : bool, [default=None]
     To limit the number of trees in predict() using information about the optimal value of the error function.
     Can be used only with eval_set.
@@ -151,14 +151,14 @@ ctr_leaf_count_limit : int, [default=None]
     This option reduces the resulting model size
     and the amount of memory required for training.
     Note that the resulting quality of the model can be affected.
-    range: [1,+inf] (for zero limit use ignored_features)
+    range: [1,+inf) (for zero limit use ignored_features)
 store_all_simple_ctr : bool, [default=None]
     Ignore categorical features, which are not used in feature combinations,
     when choosing candidates for exclusion.
     Use this parameter with ctr_leaf_count_limit only.
 max_ctr_complexity : int, [default=4]
     The maximum number of Categ features that can be combined.
-    range: [0,+inf]
+    range: [0,+inf)
 has_time : bool, [default=False]
     To use the order in which objects are represented in the input data
     (do not perform a random permutation of the dataset at the preprocessing stage).
@@ -196,6 +196,12 @@ one_hot_max_size : int, [default=None]
     Ctrs are not calculated for such features.
 random_strength : float, [default=1]
     Score standard deviation multiplier.
+random_score_type : string [default=None]
+    Type of random noise added to scores.
+    Possible values:
+        - &#39;Gumbel&#39; - Gumbel-distributed
+        - &#39;NormalWithModelSizeDecrease&#39; - Normally-distributed with deviation decreasing with model iteration count
+    If None than &#39;NormalWithModelSizeDecrease&#39; will be used by default.
 name : string, [default=&#39;experiment&#39;]
     The name that should be displayed in the visualization tools.
 ignored_features : list, [default=None]
@@ -255,7 +261,7 @@ devices : list or string, [default=None], GPU devices to use.
 bootstrap_type : string, Bayesian, Bernoulli, Poisson, MVS.
     Default bootstrap is Bayesian for GPU and MVS for CPU.
     Poisson bootstrap is supported only on GPU.
-    MVS bootstrap is supported only on CPU.
+    MVS bootstrap is supported only on GPU.
 
 subsample : float, [default=None]
     Sample rate for bagging. This parameter can be used Poisson or Bernoully bootstrap types.
@@ -456,7 +462,7 @@ text_processing : dict,
     Text processging description.
 
 eval_fraction : float, [default=None]
-    Fraction of the train dataset to be used as the evaluation dataset.</code></pre></div><a class="docs-sourcelink" target="_blank" href="https://github.com/JuliaAI/CatBoost.jl/blob/e7f56b760c6b200a5c5f7ae734480156b87a79cf/src/CatBoost.jl#L59-L69">source</a></section></article><article class="docstring"><header><a class="docstring-binding" id="CatBoost.CatBoostRegressor" href="#CatBoost.CatBoostRegressor"><code>CatBoost.CatBoostRegressor</code></a> — <span class="docstring-category">Function</span></header><section><div><pre><code class="language-julia">CatBoostRegressor(args...; kwargs...) -&gt; Py</code></pre><p>Creates a <code>CatBoostRegressor</code> object.</p><hr/><p><strong>Python documentation for <code>catboost.CatBoostRegressor</code></strong></p><p>Python class <code>CatBoostRegressor</code>.</p><pre><code class="language-text">Implementation of the scikit-learn API for CatBoost regression.
+    Fraction of the train dataset to be used as the evaluation dataset.</code></pre></div><a class="docs-sourcelink" target="_blank" href="https://github.com/JuliaAI/CatBoost.jl/blob/6d6ff0f675c0590b38c7f66a07c273e1bc72f565/src/CatBoost.jl#L59-L69">source</a></section></article><article class="docstring"><header><a class="docstring-binding" id="CatBoost.CatBoostRegressor" href="#CatBoost.CatBoostRegressor"><code>CatBoost.CatBoostRegressor</code></a> — <span class="docstring-category">Function</span></header><section><div><pre><code class="language-julia">CatBoostRegressor(args...; kwargs...) -&gt; Py</code></pre><p>Creates a <code>CatBoostRegressor</code> object.</p><hr/><p><strong>Python documentation for <code>catboost.CatBoostRegressor</code></strong></p><p>Python class <code>CatBoostRegressor</code>.</p><pre><code class="language-text">Implementation of the scikit-learn API for CatBoost regression.
 
 Parameters
 ----------
@@ -470,7 +476,7 @@ loss_function : string, [default=&#39;RMSE&#39;]
     &#39;Poisson&#39;
     &#39;MAPE&#39;
     &#39;Lq:q=value&#39;
-    &#39;SurvivalAft:dist=value;scale=value&#39;</code></pre></div><a class="docs-sourcelink" target="_blank" href="https://github.com/JuliaAI/CatBoost.jl/blob/e7f56b760c6b200a5c5f7ae734480156b87a79cf/src/CatBoost.jl#L72-L82">source</a></section></article><article class="docstring"><header><a class="docstring-binding" id="CatBoost.cv" href="#CatBoost.cv"><code>CatBoost.cv</code></a> — <span class="docstring-category">Function</span></header><section><div><pre><code class="language-julia">cv(pool::Py; kwargs...) -&gt; Table</code></pre><p>Accepts a <a href="#CatBoost.Pool"><code>CatBoost.Pool</code></a> positional argument to specify the training data, and keyword arguments to configure the settings. See the python documentation below for what keyword arguments are accepted.</p><hr/><p><strong>Python documentation for <code>catboost.cv</code></strong></p><p>Python function <code>cv</code>.</p><pre><code class="language-text">Cross-validate the CatBoost model.
+    &#39;SurvivalAft:dist=value;scale=value&#39;</code></pre></div><a class="docs-sourcelink" target="_blank" href="https://github.com/JuliaAI/CatBoost.jl/blob/6d6ff0f675c0590b38c7f66a07c273e1bc72f565/src/CatBoost.jl#L72-L82">source</a></section></article><article class="docstring"><header><a class="docstring-binding" id="CatBoost.cv" href="#CatBoost.cv"><code>CatBoost.cv</code></a> — <span class="docstring-category">Function</span></header><section><div><pre><code class="language-julia">cv(pool::Py; kwargs...) -&gt; Table</code></pre><p>Accepts a <a href="#CatBoost.Pool"><code>CatBoost.Pool</code></a> positional argument to specify the training data, and keyword arguments to configure the settings. See the python documentation below for what keyword arguments are accepted.</p><hr/><p><strong>Python documentation for <code>catboost.cv</code></strong></p><p>Python function <code>cv</code>.</p><pre><code class="language-text">Cross-validate the CatBoost model.
 
 Parameters
 ----------
@@ -587,4 +593,4 @@ Returns
 -------
 cv results : pandas.core.frame.DataFrame with cross-validation results
     columns are: test-error-mean  test-error-std  train-error-mean  train-error-std
-cv models : list of trained models, if return_models=True</code></pre></div><a class="docs-sourcelink" target="_blank" href="https://github.com/JuliaAI/CatBoost.jl/blob/e7f56b760c6b200a5c5f7ae734480156b87a79cf/src/CatBoost.jl#L26-L38">source</a></section></article><article class="docstring"><header><a class="docstring-binding" id="CatBoost.to_catboost" href="#CatBoost.to_catboost"><code>CatBoost.to_catboost</code></a> — <span class="docstring-category">Function</span></header><section><div><pre><code class="language-julia">CatBoost.to_catboost(arg)</code></pre><p><code>CatBoost.to_catboost</code> is called on each argument passed to <a href="@ref"><code>fit</code></a>, <a href="@ref"><code>predict</code></a>, <a href="@ref"><code>predict_proba</code></a>, and <a href="#CatBoost.cv"><code>cv</code></a> to allow customization of the conversion of Julia types to python types. </p><p>By default, <code>to_catboost</code> simply checks if the argument satisfies <code>Tables.istable(arg)</code>, and if so, it outputs a corresponding pandas table, and otherwise passes it on.</p><p>To customize the conversion for custom types, provide a method for this function.</p></div><a class="docs-sourcelink" target="_blank" href="https://github.com/JuliaAI/CatBoost.jl/blob/e7f56b760c6b200a5c5f7ae734480156b87a79cf/src/wrapper.jl#L41-L51">source</a></section></article><article class="docstring"><header><a class="docstring-binding" id="CatBoost.to_pandas" href="#CatBoost.to_pandas"><code>CatBoost.to_pandas</code></a> — <span class="docstring-category">Function</span></header><section><div><pre><code class="language-julia">CatBoost.to_pandas(X)</code></pre><p>Convert a table/array to a pandas dataframe</p></div><a class="docs-sourcelink" target="_blank" href="https://github.com/JuliaAI/CatBoost.jl/blob/e7f56b760c6b200a5c5f7ae734480156b87a79cf/src/wrapper.jl#L57-L61">source</a></section></article><article class="docstring"><header><a class="docstring-binding" id="CatBoost.pandas_to_tbl" href="#CatBoost.pandas_to_tbl"><code>CatBoost.pandas_to_tbl</code></a> — <span class="docstring-category">Function</span></header><section><div><pre><code class="language-julia">pandas_to_tbl(pandas_df::Py)</code></pre><p>Convert a pandas dataframe into a Tables.jl columntable</p></div><a class="docs-sourcelink" target="_blank" href="https://github.com/JuliaAI/CatBoost.jl/blob/e7f56b760c6b200a5c5f7ae734480156b87a79cf/src/wrapper.jl#L71-L75">source</a></section></article><article class="docstring"><header><a class="docstring-binding" id="CatBoost.feature_importance" href="#CatBoost.feature_importance"><code>CatBoost.feature_importance</code></a> — <span class="docstring-category">Function</span></header><section><div><pre><code class="language-julia">CatBoost.feature_importance(py_model::Py)</code></pre><p>Generate a Vector{Pair{Symbol, Float64}} of feature importances</p></div><a class="docs-sourcelink" target="_blank" href="https://github.com/JuliaAI/CatBoost.jl/blob/e7f56b760c6b200a5c5f7ae734480156b87a79cf/src/wrapper.jl#L85-L89">source</a></section></article><article class="docstring"><header><a class="docstring-binding" id="CatBoost.load_dataset" href="#CatBoost.load_dataset"><code>CatBoost.load_dataset</code></a> — <span class="docstring-category">Function</span></header><section><div><pre><code class="language-julia">load_dataset(dataset_name::Symbol)</code></pre><p>Import a catboost dataset</p></div><a class="docs-sourcelink" target="_blank" href="https://github.com/JuliaAI/CatBoost.jl/blob/e7f56b760c6b200a5c5f7ae734480156b87a79cf/src/wrapper.jl#L105-L109">source</a></section></article></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../">« Introduction</a><a class="docs-footer-nextpage" href="../mlj_api/">MLJ API »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> on <span class="colophon-date" title="Tuesday 25 July 2023 23:57">Tuesday 25 July 2023</span>. Using Julia version 1.6.7.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
+cv models : list of trained models, if return_models=True</code></pre></div><a class="docs-sourcelink" target="_blank" href="https://github.com/JuliaAI/CatBoost.jl/blob/6d6ff0f675c0590b38c7f66a07c273e1bc72f565/src/CatBoost.jl#L26-L38">source</a></section></article><article class="docstring"><header><a class="docstring-binding" id="CatBoost.to_catboost" href="#CatBoost.to_catboost"><code>CatBoost.to_catboost</code></a> — <span class="docstring-category">Function</span></header><section><div><pre><code class="language-julia">CatBoost.to_catboost(arg)</code></pre><p><code>CatBoost.to_catboost</code> is called on each argument passed to <a href="@ref"><code>fit</code></a>, <a href="@ref"><code>predict</code></a>, <a href="@ref"><code>predict_proba</code></a>, and <a href="#CatBoost.cv"><code>cv</code></a> to allow customization of the conversion of Julia types to python types. </p><p>By default, <code>to_catboost</code> simply checks if the argument satisfies <code>Tables.istable(arg)</code>, and if so, it outputs a corresponding pandas table, and otherwise passes it on.</p><p>To customize the conversion for custom types, provide a method for this function.</p></div><a class="docs-sourcelink" target="_blank" href="https://github.com/JuliaAI/CatBoost.jl/blob/6d6ff0f675c0590b38c7f66a07c273e1bc72f565/src/wrapper.jl#L41-L51">source</a></section></article><article class="docstring"><header><a class="docstring-binding" id="CatBoost.to_pandas" href="#CatBoost.to_pandas"><code>CatBoost.to_pandas</code></a> — <span class="docstring-category">Function</span></header><section><div><pre><code class="language-julia">CatBoost.to_pandas(X)</code></pre><p>Convert a table/array to a pandas dataframe</p></div><a class="docs-sourcelink" target="_blank" href="https://github.com/JuliaAI/CatBoost.jl/blob/6d6ff0f675c0590b38c7f66a07c273e1bc72f565/src/wrapper.jl#L57-L61">source</a></section></article><article class="docstring"><header><a class="docstring-binding" id="CatBoost.pandas_to_tbl" href="#CatBoost.pandas_to_tbl"><code>CatBoost.pandas_to_tbl</code></a> — <span class="docstring-category">Function</span></header><section><div><pre><code class="language-julia">pandas_to_tbl(pandas_df::Py)</code></pre><p>Convert a pandas dataframe into a Tables.jl columntable</p></div><a class="docs-sourcelink" target="_blank" href="https://github.com/JuliaAI/CatBoost.jl/blob/6d6ff0f675c0590b38c7f66a07c273e1bc72f565/src/wrapper.jl#L71-L75">source</a></section></article><article class="docstring"><header><a class="docstring-binding" id="CatBoost.feature_importance" href="#CatBoost.feature_importance"><code>CatBoost.feature_importance</code></a> — <span class="docstring-category">Function</span></header><section><div><pre><code class="language-julia">CatBoost.feature_importance(py_model::Py)</code></pre><p>Generate a Vector{Pair{Symbol, Float64}} of feature importances</p></div><a class="docs-sourcelink" target="_blank" href="https://github.com/JuliaAI/CatBoost.jl/blob/6d6ff0f675c0590b38c7f66a07c273e1bc72f565/src/wrapper.jl#L85-L89">source</a></section></article><article class="docstring"><header><a class="docstring-binding" id="CatBoost.load_dataset" href="#CatBoost.load_dataset"><code>CatBoost.load_dataset</code></a> — <span class="docstring-category">Function</span></header><section><div><pre><code class="language-julia">load_dataset(dataset_name::Symbol)</code></pre><p>Import a catboost dataset</p></div><a class="docs-sourcelink" target="_blank" href="https://github.com/JuliaAI/CatBoost.jl/blob/6d6ff0f675c0590b38c7f66a07c273e1bc72f565/src/wrapper.jl#L106-L110">source</a></section></article></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../">« Introduction</a><a class="docs-footer-nextpage" href="../mlj_api/">MLJ API »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> on <span class="colophon-date" title="Thursday 11 January 2024 23:56">Thursday 11 January 2024</span>. Using Julia version 1.6.7.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
