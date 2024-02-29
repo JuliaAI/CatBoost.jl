@@ -39,7 +39,6 @@ jobs:
             arch: x64
           - os: macos-latest
             version: '1'
-            arch: x64
     steps:
       - uses: actions/checkout@v4
         with:
