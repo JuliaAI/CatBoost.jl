@@ -3,7 +3,6 @@ module Multiclass
 using CatBoost.MLJCatBoostInterface
 using DataFrames
 using MLJBase
-using PythonCall
 
 # Initialize data
 train_data = DataFrame([coerce(["a", "a", "c"], MLJBase.Multiclass),
