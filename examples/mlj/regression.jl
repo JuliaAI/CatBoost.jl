@@ -3,7 +3,6 @@ module Regression
 using CatBoost.MLJCatBoostInterface
 using DataFrames
 using MLJBase
-using PythonCall
 
 # Initialize data
 train_data = DataFrame([[1, 4, 30], [4, 5, 40], [5, 6, 50], [6, 7, 60]], :auto)
