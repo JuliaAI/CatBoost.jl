@@ -23,19 +23,20 @@ using CatBoost.MLJCatBoostInterface
 using DataFrames
 using MLJBase
 
-train_data = DataFrame([[1,4,30], [4,5,40], [5,6,50], [6,7,60]], :auto)
-eval_data = DataFrame([[2,1], [4,4], [6,50], [8,60]], :auto)
-train_labels = [10.0, 20.0, 30.0] 
+# Initialize data
+train_data = DataFrame([[1, 4, 30], [4, 5, 40], [5, 6, 50], [6, 7, 60]], :auto)
+train_labels = [10.0, 20.0, 30.0]
+eval_data = DataFrame([[2, 1], [4, 4], [6, 50], [8, 60]], :auto)
 
-# Initialize MLJ Machine
-model = CatBoostRegressor(iterations = 2, learning_rate = 1, depth = 2)
+# Initialize CatBoostClassifier
+model = CatBoostRegressor(; iterations=2, learning_rate=1.0, depth=2)
 mach = machine(model, train_data, train_labels)
 
 # Fit model
 MLJBase.fit!(mach)
 
 # Get predictions
-preds = predict(model, eval_data)
+preds_class = MLJBase.predict(mach, eval_data)
 
 end # module</code></pre><h1 id="Restricting-Python-catboost-version"><a class="docs-heading-anchor" href="#Restricting-Python-catboost-version">Restricting Python catboost version</a><a id="Restricting-Python-catboost-version-1"></a><a class="docs-heading-anchor-permalink" href="#Restricting-Python-catboost-version" title="Permalink"></a></h1><p>By default, <code>CatBoost.jl</code> installs the latest compatible version of <code>catboost</code> (version <code>&gt;=1.1</code>) in your current <code>CondaPkg.jl</code> environment. To install a specific version, create a <code>CondaPkg.toml</code> file using <code>CondaPkg.jl</code>. Below is an example for specifying <code>catboost</code> version <code>v1.1</code>:</p><pre><code class="language-julia">using CondaPkg
-CondaPkg.add(&quot;catboost&quot;; version=&quot;=1.1&quot;)</code></pre><p>This will create a <code>CondaPkg.toml</code> file in your current envrionment with the restricted <code>catboost</code> version. For more information on managing Conda environments with <code>CondaPkg.jl</code>, refer to the <a href="https://github.com/cjdoris/CondaPkg.jl">official documentation</a>.</p></article><nav class="docs-footer"><a class="docs-footer-nextpage" href="wrapper/">Wrapper »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> on <span class="colophon-date" title="Thursday 29 February 2024 19:22">Thursday 29 February 2024</span>. Using Julia version 1.6.7.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
+CondaPkg.add(&quot;catboost&quot;; version=&quot;=1.1&quot;)</code></pre><p>This will create a <code>CondaPkg.toml</code> file in your current envrionment with the restricted <code>catboost</code> version. For more information on managing Conda environments with <code>CondaPkg.jl</code>, refer to the <a href="https://github.com/cjdoris/CondaPkg.jl">official documentation</a>.</p></article><nav class="docs-footer"><a class="docs-footer-nextpage" href="wrapper/">Wrapper »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> on <span class="colophon-date" title="Friday 1 March 2024 03:05">Friday 1 March 2024</span>. Using Julia version 1.6.7.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
