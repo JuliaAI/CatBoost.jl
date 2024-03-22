@@ -100,10 +100,11 @@ MMI.reports_feature_importances(::Type{<:CatBoostClassifier}) = true
 function MMI.predict(mlj_model::CatBoostClassifier, fitresult, X_pool)
     if fitresult[1] === nothing
         # Always predict the single class
-        n = nrow(X_pool)
+        n = pyconvert(Int, X_pool.shape[0])
         classes = [fitresult.single_class]
         probs = ones(n, 1)
-        return MMI.UnivariateFinite(classes, probs; pool=fitresult.y_first)
+        pool = MMI.categorical([fitresult.y_first])
+        return MMI.UnivariateFinite(classes, probs; pool=pool)
     end
 
     model, y_first = fitresult
@@ -116,8 +117,8 @@ end
 function MMI.predict_mode(mlj_model::CatBoostClassifier, fitresult, X_pool)
     if fitresult[1] === nothing
         # Return probability 1 for the single class
-        n = nrow(X_pool)
-        return hcat(ones(n), zeros(n))
+        n = pyconvert(Int, X_pool.shape[0])
+        return fill(fitresult.y_first, n)
     end
 
     model, y_first = fitresult

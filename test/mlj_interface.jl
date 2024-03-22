@@ -26,6 +26,23 @@
         restored_fitresult = MLJBase.restore(mach, serializable_fitresult)
     end
 
+    @testset "CatBoostClassifier - single class" begin
+        X = (; a=[1, 4, 5, 6], b=[4, 5, 6, 7])
+        y = [0, 0, 0, 0]
+
+        # MLJ Interface
+        model = CatBoostClassifier(; iterations=5)
+        mach = machine(model, X, y)
+        MLJBase.fit!(mach)
+        preds = MLJBase.predict(mach, X)
+        println(preds)
+        probs = MLJBase.predict_mode(mach, X)
+        println(probs)
+
+        serializable_fitresult = MLJBase.save(mach, mach)
+        restored_fitresult = MLJBase.restore(mach, serializable_fitresult)
+    end
+
     @testset "CatBoostRegressor" begin
         X = (; a=[1, 4, 5, 6], b=[4, 5, 6, 7])
         y = [2.0, 4.0, 6.0, 7.0]
