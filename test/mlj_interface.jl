@@ -22,7 +22,7 @@
         preds = MLJBase.predict(mach, X)
         probs = MLJBase.predict_mode(mach, X)
 
-        serializable_fitresult = MLJBase.save(mach, mach.fitresult)
+        serializable_fitresult = MLJBase.save(mach, mach)
         restored_fitresult = MLJBase.restore(mach, serializable_fitresult)
     end
 
@@ -36,7 +36,7 @@
         MLJBase.fit!(mach)
         preds = MLJBase.predict(mach, X)
 
-        serializable_fitresult = MLJBase.save(mach, mach.fitresult)
+        serializable_fitresult = MLJBase.save(mach, mach)
         restored_fitresult = MLJBase.restore(mach, serializable_fitresult)
     end
 
