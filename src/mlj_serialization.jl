@@ -79,7 +79,8 @@ end
 function MMI.restore(model::CatBoostClassifier, serializable_fitresult)
     if serializable_fitresult[1] === nothing
         # Case 1: Single unique class
-        return (model=nothing, single_class=serializable_fitresult[2], y_first=serializable_fitresult[3])
+        return (model=nothing, single_class=serializable_fitresult[2],
+                y_first=serializable_fitresult[3])
     else
         # Case 2: Multiple unique classes
         persistent_booster, y_first = serializable_fitresult
