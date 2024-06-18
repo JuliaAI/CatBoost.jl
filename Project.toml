@@ -1,7 +1,7 @@
 name = "CatBoost"
 uuid = "e2e10f9a-a85d-4fa9-b6b2-639a32100a12"
 authors = ["Beacon Biosignals, Inc."]
-version = "0.3.4"
+version = "0.3.5"
 
 [deps]
 MLJModelInterface = "e80e1ace-859a-464e-9ed9-23947d8ae3ea"
