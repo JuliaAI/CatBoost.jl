@@ -140,7 +140,7 @@ end
 #####
 
 function MMI.update(mlj_model::CatBoostModels, verbosity::Integer, fitresult, cache,
-    data_pool)
+                    data_pool)
     if mlj_model.iterations > cache.mlj_model.iterations &&
         MMI.is_same_except(mlj_model, cache.mlj_model, :iterations)
         iterations = mlj_model.iterations - cache.mlj_model.iterations
