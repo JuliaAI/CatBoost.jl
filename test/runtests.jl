@@ -2,7 +2,10 @@ using Aqua
 using DataFrames
 using MLJBase
 using MLJTestInterface
+using MLJTuning
 using PythonCall
+using StatisticalMeasures
+using Statistics
 using Test
 
 const WRAPPER_EXAMPLES_DIR = joinpath(@__DIR__, "..", "examples/wrapper")

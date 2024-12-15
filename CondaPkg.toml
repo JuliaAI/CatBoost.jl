@@ -1,3 +1,2 @@
 [deps]
-numpy = ">=1,<2"
 catboost = ">=1.1"

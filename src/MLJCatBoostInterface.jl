@@ -140,9 +140,9 @@ end
 #####
 
 function MMI.update(mlj_model::CatBoostModels, verbosity::Integer, fitresult, cache,
-                    data_pool)
+    data_pool)
     if mlj_model.iterations > cache.mlj_model.iterations &&
-       MMI.is_same_except(mlj_model, cache.mlj_model, :iterations)
+        MMI.is_same_except(mlj_model, cache.mlj_model, :iterations)
         iterations = mlj_model.iterations - cache.mlj_model.iterations
         verbose = verbosity <= 1 ? false : true
         new_model = model_init(mlj_model; verbose, iterations)
@@ -150,7 +150,7 @@ function MMI.update(mlj_model::CatBoostModels, verbosity::Integer, fitresult, ca
         report = (feature_importances=feature_importance(new_model),)
         cache = (; mlj_model=mlj_model)
     else
-        new_model, cache, report = fit(mlj_model, verbosity, data_pool)
+        new_model, cache, report = MMI.fit(mlj_model, verbosity, data_pool)
     end
 
     return new_model, cache, report

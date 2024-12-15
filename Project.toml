@@ -15,8 +15,11 @@ DataFrames = "1.6"
 MLJBase = "1"
 MLJModelInterface = "1.7"
 MLJTestInterface = "0.2.6"
+MLJTuning = "0.8"
 OrderedCollections = "1.6"
 PythonCall = "0.9"
+StatisticalMeasures = "0.1"
+Statistics = "1.6"
 Tables = "1.10"
 Test = "1.6"
 julia = "1.6"
@@ -26,7 +29,10 @@ Aqua = "4c88cf16-eb10-579e-8560-4a9242c79595"
 DataFrames = "a93c6f00-e57d-5684-b7b6-d8193f3e46c0"
 MLJBase = "a7f614a8-145f-11e9-1d2a-a57a1082229d"
 MLJTestInterface = "72560011-54dd-4dc2-94f3-c5de45b75ecd"
+MLJTuning = "03970b2e-30c4-11ea-3135-d1576263f10f"
+StatisticalMeasures = "a19d573c-0a75-4610-95b3-7071388c7541"
+Statistics = "10745b16-79ce-11e8-11f9-7d13ad32a3b2"
 Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
 
 [targets]
-test = ["Aqua", "DataFrames", "MLJBase", "MLJTestInterface", "Test"]
+test = ["Aqua", "DataFrames", "MLJBase", "MLJTestInterface", "MLJTuning", "Statistics", "StatisticalMeasures", "Test"]
