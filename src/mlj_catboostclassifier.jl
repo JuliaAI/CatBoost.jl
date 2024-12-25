@@ -72,8 +72,12 @@ function model_init(mlj_model::CatBoostClassifier; kw...)
     return catboost.CatBoostClassifier(; mlj_to_kwargs(mlj_model)..., kw...)
 end
 
+prepare_single_class(y_first) = CategoricalArray([y_first])[1]
+prepare_single_class(y_first::CategoricalValue) = y_first
+
 function MMI.fit(mlj_model::CatBoostClassifier, verbosity::Int, data_pool, y_first)
-    # Check if y_first has only one unique value
+    # Check if the data pool has only one unique value
+    y_first = prepare_single_class(y_first)
     unique_classes = pyconvert(Vector, numpy.unique(data_pool.get_label()))
     if length(unique_classes) == 1
         # Skip training and store the single class
@@ -103,8 +107,7 @@ function MMI.predict(mlj_model::CatBoostClassifier, fitresult, X_pool)
         n = pyconvert(Int, X_pool.shape[0])
         classes = [fitresult.single_class]
         probs = ones(n, 1)
-        pool = MMI.categorical([fitresult.y_first])
-        return MMI.UnivariateFinite(classes, probs; pool=pool)
+        return MMI.UnivariateFinite(classes, probs; pool=fitresult.y_first)
     end
 
     model, y_first = fitresult

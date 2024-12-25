@@ -9,6 +9,7 @@ using Tables
 using MLJModelInterface: MLJModelInterface
 const MMI = MLJModelInterface
 using MLJModelInterface: Table, Continuous, Count, Finite, OrderedFactor, Multiclass
+using CategoricalArrays: CategoricalArray, CategoricalValue
 const PKG = "CatBoost"
 
 """
