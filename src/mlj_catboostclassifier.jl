@@ -102,18 +102,18 @@ MMI.fitted_params(::CatBoostClassifier, model) = (model=model,)
 MMI.reports_feature_importances(::Type{<:CatBoostClassifier}) = true
 
 function MMI.predict(mlj_model::CatBoostClassifier, fitresult, X_pool)
-    if fitresult[1] === nothing
+    model, y_first = fitresult
+    if model === nothing
         # Always predict the single class
         n = pyconvert(Int, X_pool.shape[0])
         classes = [fitresult.single_class]
         probs = ones(n, 1)
-        return MMI.UnivariateFinite(classes, probs; pool=fitresult.y_first)
+        return MMI.UnivariateFinite(classes, probs; pool=y_first.pool)
     end
 
-    model, y_first = fitresult
     classes = pyconvert(Array, model.classes_.tolist())
     py_preds = predict_proba(model, X_pool)
-    preds = MMI.UnivariateFinite(classes, pyconvert(Array, py_preds); pool=y_first)
+    preds = MMI.UnivariateFinite(classes, pyconvert(Array, py_preds); pool=y_first.pool)
     return preds
 end
 
