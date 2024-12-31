@@ -93,7 +93,7 @@ function MMI.fit(mlj_model::CatBoostClassifier, verbosity::Int, data_pool, y_fir
 
     cache = (; mlj_model=deepcopy(mlj_model))
     report = (feature_importances=feature_importance(model),)
-    fitresult = (model, y_first)
+    fitresult = (model=model, y_first=y_first)
 
     return (fitresult, cache, report)
 end
@@ -102,18 +102,17 @@ MMI.fitted_params(::CatBoostClassifier, model) = (model=model,)
 MMI.reports_feature_importances(::Type{<:CatBoostClassifier}) = true
 
 function MMI.predict(mlj_model::CatBoostClassifier, fitresult, X_pool)
-    model, y_first = fitresult
-    if model === nothing
+    if fitresult.model === nothing
         # Always predict the single class
         n = pyconvert(Int, X_pool.shape[0])
         classes = [fitresult.single_class]
         probs = ones(n, 1)
-        return MMI.UnivariateFinite(classes, probs; pool=y_first.pool)
+        return MMI.UnivariateFinite(classes, probs; pool=fitresult.y_first.pool)
     end
 
-    classes = pyconvert(Array, model.classes_.tolist())
-    py_preds = predict_proba(model, X_pool)
-    preds = MMI.UnivariateFinite(classes, pyconvert(Array, py_preds); pool=y_first.pool)
+    classes = pyconvert(Array, fitresult.model.classes_.tolist())
+    py_preds = predict_proba(fitresult.model, X_pool)
+    preds = MMI.UnivariateFinite(classes, pyconvert(Array, py_preds); pool=fitresult.y_first.pool)
     return preds
 end
 
