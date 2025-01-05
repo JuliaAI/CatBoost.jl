@@ -57,6 +57,63 @@
         restored_fitresult = MLJBase.restore(mach, serializable_fitresult)
     end
 
+    @testset "evaluate" begin
+        using Statistics
+
+        X = (a=[1, 2, 3, 4], b=[4, 5, 6, 7])
+        y = [1.0, 2.0, 3.0, 4.0]
+        model = CatBoostRegressor(; iterations=5)
+        mach = machine(model, X, y)
+        e = evaluate!(mach; resampling=Holdout(; fraction_train=0.7),
+                      measure=l1, verbosity=0)
+        @test e.measurement[1] >= 0.0 # l1 should be non-negative
+
+        y_class = categorical(["cat", "dog", "cat", "dog"])
+        model_class = CatBoostClassifier(; iterations=5)
+        mach_class = machine(model_class, X, y_class)
+        e_class = evaluate!(mach_class; resampling=CV(; nfolds=2),
+                            measure=accuracy, verbosity=0)
+        @test 0.0 <= e_class.measurement[1] <= 1.0 # accuracy between 0 and 1
+    end
+
+    @testset "MLJ GridSearch" begin
+        X = (a=[1, 2, 3, 4, 5, 6], b=[4, 5, 6, 7, 8, 9])
+        y = [1.0, 2.0, 3.0, 4.0, 5, 6]
+        model = CatBoostRegressor()
+        r = range(model, :iterations; lower=2, upper=5)
+        tuning = Grid(; resolution=3)
+        tuned_model = TunedModel(; model=model, tuning=tuning,
+                                 resampling=Holdout(; fraction_train=0.7),
+                                 range=r, measure=l1)
+        mach = machine(tuned_model, X, y)
+        e = evaluate!(mach;
+                      measure=l1,
+                      resampling=Holdout(; fraction_train=0.7),
+                      verbosity=0,
+                      acceleration=CPU1(),
+                      per_observation=false)
+
+        @test e.measurement[1] >= 0.0 # l1 should be non-negative
+
+        y_class = categorical(["cat", "dog", "cat", "dog", "cat", "dog"])
+        model_class = CatBoostClassifier()
+        r1 = range(model_class, :iterations; lower=2, upper=5)
+        r2 = range(model_class, :depth; lower=1, upper=3)
+        tuning_class = Grid(; resolution=2)
+        tuned_model_class = TunedModel(; model=model_class, tuning=tuning_class,
+                                       resampling=CV(; nfolds=2),
+                                       range=[r1, r2], measure=accuracy)
+
+        mach_class = machine(tuned_model_class, X, y_class)
+        e_class = evaluate!(mach_class;
+                            measure=accuracy,
+                            resampling=CV(; nfolds=2),
+                            verbosity=0,
+                            acceleration=CPU1(),
+                            per_observation=false)
+        @test 0.0 <= e_class.measurement[1] <= 1.0 # accuracy between 0 and 1
+    end
+
     @testset "generic interface tests" begin
         @testset "CatBoostRegressor" begin
             data = MLJTestInterface.make_regression()

@@ -9,6 +9,7 @@ using Tables
 using MLJModelInterface: MLJModelInterface
 const MMI = MLJModelInterface
 using MLJModelInterface: Table, Continuous, Count, Finite, OrderedFactor, Multiclass
+using CategoricalArrays: CategoricalArray, CategoricalValue
 const PKG = "CatBoost"
 
 """
@@ -150,7 +151,7 @@ function MMI.update(mlj_model::CatBoostModels, verbosity::Integer, fitresult, ca
         report = (feature_importances=feature_importance(new_model),)
         cache = (; mlj_model=mlj_model)
     else
-        new_model, cache, report = fit(mlj_model, verbosity, data_pool)
+        new_model, cache, report = MMI.fit(mlj_model, verbosity, data_pool)
     end
 
     return new_model, cache, report
