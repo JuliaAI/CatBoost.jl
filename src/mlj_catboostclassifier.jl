@@ -110,7 +110,7 @@ function MMI.predict(mlj_model::CatBoostClassifier, fitresult, X_pool)
         return MMI.UnivariateFinite(classes, probs; pool=fitresult.y_first.pool)
     end
 
-    classes = pyconvert(Array, fitresult.model.classes_.tolist())
+    classes = unwrap.(pyconvert(Array, fitresult.model.classes_.tolist()))
     py_preds = predict_proba(fitresult.model, X_pool)
     preds = MMI.UnivariateFinite(classes, pyconvert(Array, py_preds);
                                  pool=fitresult.y_first.pool)

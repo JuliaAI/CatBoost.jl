@@ -9,7 +9,7 @@ using Tables
 using MLJModelInterface: MLJModelInterface
 const MMI = MLJModelInterface
 using MLJModelInterface: Table, Continuous, Count, Finite, OrderedFactor, Multiclass
-using CategoricalArrays: CategoricalArray, CategoricalValue
+using CategoricalArrays: CategoricalArray, CategoricalValue, unwrap
 const PKG = "CatBoost"
 
 """
@@ -68,7 +68,8 @@ function prepare_input(X, y)
 
     cat_features = get_dtype_feature_ix(table_input, Multiclass) .- 1 # convert to 0 based indexing
     text_features = get_dtype_feature_ix(table_input, MMI.Textual) .- 1 # convert to 0 based indexing
-    data_pool = Pool(table_input; label=numpy.array(Array(y)), cat_features, text_features)
+    table_input = map(col -> unwrap.(col), table_input)
+    data_pool = Pool(table_input; label=numpy.array(unwrap.(y)), cat_features, text_features)
 
     return data_pool
 end
@@ -84,6 +85,10 @@ function prepare_input(X)
 
     cat_features = get_dtype_feature_ix(table_input, Multiclass) .- 1 # convert to 0 based indexing
     text_features = get_dtype_feature_ix(table_input, MMI.Textual) .- 1 # convert to 0 based indexing
+
+    # Unwrap CategoricalArrays to raw values (String/Int) so PythonCall converts them 
+    # to native Python types instead of AnyValue wrappers.
+    table_input = map(col -> unwrap.(col), table_input)
 
     X_pool = Pool(table_input; cat_features, text_features)
 
