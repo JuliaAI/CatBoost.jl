@@ -1,8 +1,9 @@
 module CatBoost
 
-using PythonCall
-using OrderedCollections
-using Tables
+using OrderedCollections: OrderedCollections
+using PythonCall: PythonCall, Py, PyTable, pybuiltins, pyconvert, pyimport,
+                  pytable
+using Tables: Tables
 
 #####
 ##### _init_

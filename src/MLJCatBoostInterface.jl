@@ -3,8 +3,8 @@ module MLJCatBoostInterface
 
 using ..CatBoost: catboost, numpy, to_pandas, feature_importance, predict, predict_proba,
                   Pool
-using PythonCall
-using Tables
+using PythonCall: PythonCall, Py, pyconvert, pylist, pydict
+using Tables: Tables
 
 using MLJModelInterface: MLJModelInterface
 const MMI = MLJModelInterface
@@ -69,7 +69,8 @@ function prepare_input(X, y)
     cat_features = get_dtype_feature_ix(table_input, Multiclass) .- 1 # convert to 0 based indexing
     text_features = get_dtype_feature_ix(table_input, MMI.Textual) .- 1 # convert to 0 based indexing
     table_input = map(col -> unwrap.(col), table_input)
-    data_pool = Pool(table_input; label=numpy.array(unwrap.(y)), cat_features, text_features)
+    data_pool = Pool(table_input; label=numpy.array(unwrap.(y)), cat_features,
+                     text_features)
 
     return data_pool
 end
