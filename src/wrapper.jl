@@ -74,8 +74,9 @@ end
 Convert a pandas dataframe into a Tables.jl columntable
 """
 function pandas_to_tbl(pandas_df::Py)
-    tbl = Tables.columntable(PyTable(pandas_df))
-    return tbl
+    cols = pyconvert(Vector{String}, pandas_df.columns.tolist())
+    d = pyconvert(Dict{String,Vector}, pandas_df.to_dict("list"))
+    return (; (Symbol(c) => d[c] for c in cols)...)
 end
 
 #####
@@ -90,7 +91,7 @@ Generate a Vector{Pair{Symbol, Float64}} of feature importances
 function feature_importance(py_model::Py)
     names = pyconvert(Vector{String}, py_model.feature_names_)
     importances = pyconvert(Vector{Float64}, py_model.feature_importances_)
-    return Symbol.(names) .=> importances
+    return [Symbol(names[i]) => importances[i] for i in eachindex(names, importances)]
 end
 
 #####
