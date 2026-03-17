@@ -52,7 +52,7 @@
         mach = machine(model, X, y)
         MLJBase.fit!(mach)
         preds = MLJBase.predict(mach, X)
-        
+
         serializable_fitresult = MLJBase.save(mach, mach)
         restored_fitresult = MLJBase.restore(mach, serializable_fitresult)
 
