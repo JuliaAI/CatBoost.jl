@@ -88,15 +88,9 @@ end
 Generate a Vector{Pair{Symbol, Float64}} of feature importances
 """
 function feature_importance(py_model::Py)
-    py_df_importance = pandas.DataFrame()
-    py_df_importance["name"] = py_model.feature_names_
-    py_df_importance["importance"] = py_model.feature_importances_
-    tbl_importance = pandas_to_tbl(py_df_importance)
-    n_features = size(tbl_importance.name, 1)
-    feat_importance = [Symbol(tbl_importance.name[i]) => tbl_importance.importance[i]
-                       for i in
-                           1:n_features]
-    return feat_importance
+    names = pyconvert(Vector{String}, py_model.feature_names_)
+    importances = pyconvert(Vector{Float64}, py_model.feature_importances_)
+    return Symbol.(names) .=> importances
 end
 
 #####
