@@ -52,9 +52,16 @@
         mach = machine(model, X, y)
         MLJBase.fit!(mach)
         preds = MLJBase.predict(mach, X)
-
+        
         serializable_fitresult = MLJBase.save(mach, mach)
         restored_fitresult = MLJBase.restore(mach, serializable_fitresult)
+
+        # Verify feature importances are reported correctly
+        rpt = report(mach)
+        fi = rpt.feature_importances
+        @test length(fi) == 2
+        @test all(p -> p isa Pair{Symbol,Float64}, fi)
+        @test Set(first.(fi)) == Set([:a, :b])
     end
 
     @testset "evaluate" begin
